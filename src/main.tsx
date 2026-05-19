@@ -9,6 +9,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undef
 const kakaoChannelUrl = (import.meta.env.VITE_KAKAO_CHANNEL_URL as string | undefined) || ''
 const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null
 const ADMIN_EMAIL = 'linkbus0213@gmail.com'
+const PRODUCT_IMAGE_BUCKET = 'product-images'
 
 type Brand = '애플' | '삼성' | '기타'
 type Carrier = 'SK' | 'KT' | 'LG' | '알뜰폰'
@@ -73,6 +74,7 @@ const tips = ['아이폰17 / 갤럭시 S26 울트라 휴대폰 “0원폰”의 
 function money(value: number | null | undefined) { return value == null ? '상담가' : `${value.toLocaleString()}원` }
 function rowToPhone(row: ProductRow): Phone { return { id: row.id, brand: row.brand, series: row.series, carrier: row.carrier, joinType: row.join_type, name: row.name, subtitle: row.subtitle || '', image: row.image_url || officialImages.iphone, price: row.sale_price, rebate: row.rebate, monthly: row.monthly_fee || 0, support: row.support_amount || 0, badge: row.badge || '추천', tag: row.tag || row.brand, isVisible: row.is_visible } }
 function phoneToRow(phone: Phone) { return { brand: phone.brand, series: phone.series, carrier: phone.carrier, join_type: phone.joinType, name: phone.name, subtitle: phone.subtitle, image_url: phone.image, sale_price: phone.price, rebate: phone.rebate, monthly_fee: phone.monthly, support_amount: phone.support, badge: phone.badge, tag: phone.tag, is_visible: phone.isVisible ?? true } }
+function safeFileName(name: string) { return name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]/g, '-').replace(/-+/g, '-').toLowerCase() || 'image' }
 
 function App() {
   if (location.pathname.startsWith('/admin')) return <AdminApp />
@@ -148,8 +150,19 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
   const [products, setProducts] = useState<Phone[]>([])
   const [editing, setEditing] = useState<Phone>(blankPhone)
   const [message, setMessage] = useState('')
+  const [uploading, setUploading] = useState(false)
   const load = React.useCallback(async () => { const { data, error } = await supabase!.from('sale_products').select('*').order('sort_order', { ascending: true }); if (!error) setProducts(((data || []) as ProductRow[]).map(rowToPhone)) }, [])
   React.useEffect(() => { load() }, [load])
+  async function uploadImage(file: File) {
+    setUploading(true); setMessage('이미지 업로드 중...')
+    const path = `products/${Date.now()}-${safeFileName(file.name)}`
+    const { error } = await supabase!.storage.from(PRODUCT_IMAGE_BUCKET).upload(path, file, { cacheControl: '3600' })
+    if (error) { setMessage(`이미지 업로드 실패: ${error.message}`); setUploading(false); return }
+    const { data } = supabase!.storage.from(PRODUCT_IMAGE_BUCKET).getPublicUrl(path)
+    setEditing((current) => ({ ...current, image: data.publicUrl }))
+    setMessage('이미지 업로드 완료. 저장 버튼을 누르면 상품에 반영됩니다.')
+    setUploading(false)
+  }
   async function save(e: React.FormEvent) {
     e.preventDefault(); setMessage('')
     const payload = phoneToRow(editing)
@@ -157,9 +170,13 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
     if (result.error) { setMessage(`저장 실패: ${result.error.message}`); return }
     setMessage('저장 완료'); setEditing(blankPhone); load()
   }
-  return <AdminShell><div className="admin-head"><div><h1>상품 관리자</h1><p>모델, 판매금액, 리베이트, 지원금, 노출 여부를 수정할 수 있어요.</p></div><button onClick={onLogout}>로그아웃</button></div><section className="admin-grid"><form className="admin-card product-form" onSubmit={save}><h2>{editing.id ? '상품 수정' : '상품 등록'}</h2><AdminInput label="모델명" value={editing.name} onChange={(v) => setEditing({ ...editing, name: v })} required /><AdminInput label="설명" value={editing.subtitle} onChange={(v) => setEditing({ ...editing, subtitle: v })} /><label>제조사<select value={editing.brand} onChange={(e) => setEditing({ ...editing, brand: e.target.value as Brand })}><option>애플</option><option>삼성</option><option>기타</option></select></label><AdminInput label="시리즈" value={editing.series} onChange={(v) => setEditing({ ...editing, series: v })} /><label>통신사<select value={editing.carrier} onChange={(e) => setEditing({ ...editing, carrier: e.target.value as Carrier })}><option>SK</option><option>KT</option><option>LG</option><option>알뜰폰</option></select></label><label>가입유형<select value={editing.joinType} onChange={(e) => setEditing({ ...editing, joinType: e.target.value as JoinType })}><option>번호이동</option><option>기기변경</option><option>신규가입</option></select></label><AdminNumber label="판매금액" value={editing.price} onChange={(v) => setEditing({ ...editing, price: v })} /><AdminNumber label="리베이트" value={editing.rebate} onChange={(v) => setEditing({ ...editing, rebate: v })} /><AdminNumber label="월 요금" value={editing.monthly} onChange={(v) => setEditing({ ...editing, monthly: v || 0 })} /><AdminNumber label="지원금" value={editing.support} onChange={(v) => setEditing({ ...editing, support: v || 0 })} /><AdminInput label="배지" value={editing.badge} onChange={(v) => setEditing({ ...editing, badge: v })} /><AdminInput label="태그" value={editing.tag} onChange={(v) => setEditing({ ...editing, tag: v })} /><AdminInput label="이미지 URL" value={editing.image} onChange={(v) => setEditing({ ...editing, image: v })} /><label className="admin-check"><input type="checkbox" checked={editing.isVisible} onChange={(e) => setEditing({ ...editing, isVisible: e.target.checked })} /> 고객 화면에 노출</label>{message && <p className="form-message success">{message}</p>}<button className="admin-primary">저장</button><button type="button" onClick={() => setEditing(blankPhone)}>새 상품 입력</button></form><section className="admin-card"><h2>상품 목록</h2><div className="admin-list">{products.map((p) => <button key={p.id} onClick={() => setEditing(p)}><img src={p.image} alt=""/><span><b>{p.name}</b><small>{p.brand} · {p.carrier} · {p.joinType}</small></span><strong>{money(p.price)}</strong><em>{p.rebate ? `리베이트 ${money(p.rebate)}` : '리베이트 없음'}</em>{!p.isVisible && <i>숨김</i>}</button>)}</div></section></section></AdminShell>
+  return <AdminShell><div className="admin-head"><div><h1>상품 관리자</h1><p>모델, 판매금액, 리베이트, 지원금, 노출 여부를 수정할 수 있어요.</p></div><button onClick={onLogout}>로그아웃</button></div><section className="admin-grid"><form className="admin-card product-form" onSubmit={save}><h2>{editing.id ? '상품 수정' : '상품 등록'}</h2><AdminInput label="모델명" value={editing.name} onChange={(v) => setEditing({ ...editing, name: v })} required /><AdminInput label="설명" value={editing.subtitle} onChange={(v) => setEditing({ ...editing, subtitle: v })} /><label>제조사<select value={editing.brand} onChange={(e) => setEditing({ ...editing, brand: e.target.value as Brand })}><option>애플</option><option>삼성</option><option>기타</option></select></label><AdminInput label="시리즈" value={editing.series} onChange={(v) => setEditing({ ...editing, series: v })} /><label>통신사<select value={editing.carrier} onChange={(e) => setEditing({ ...editing, carrier: e.target.value as Carrier })}><option>SK</option><option>KT</option><option>LG</option><option>알뜰폰</option></select></label><label>가입유형<select value={editing.joinType} onChange={(e) => setEditing({ ...editing, joinType: e.target.value as JoinType })}><option>번호이동</option><option>기기변경</option><option>신규가입</option></select></label><AdminNumber label="판매금액" value={editing.price} onChange={(v) => setEditing({ ...editing, price: v })} /><AdminNumber label="리베이트" value={editing.rebate} onChange={(v) => setEditing({ ...editing, rebate: v })} /><AdminNumber label="월 요금" value={editing.monthly} onChange={(v) => setEditing({ ...editing, monthly: v || 0 })} /><AdminNumber label="지원금" value={editing.support} onChange={(v) => setEditing({ ...editing, support: v || 0 })} /><AdminInput label="배지" value={editing.badge} onChange={(v) => setEditing({ ...editing, badge: v })} /><AdminInput label="태그" value={editing.tag} onChange={(v) => setEditing({ ...editing, tag: v })} /><ImageUploader image={editing.image} uploading={uploading} onUpload={uploadImage} /><label className="admin-check"><input type="checkbox" checked={editing.isVisible} onChange={(e) => setEditing({ ...editing, isVisible: e.target.checked })} /> 고객 화면에 노출</label>{message && <p className="form-message success">{message}</p>}<button className="admin-primary">저장</button><button type="button" onClick={() => setEditing(blankPhone)}>새 상품 입력</button></form><section className="admin-card"><h2>상품 목록</h2><div className="admin-list">{products.map((p) => <button key={p.id} onClick={() => setEditing(p)}><img src={p.image} alt=""/><span><b>{p.name}</b><small>{p.brand} · {p.carrier} · {p.joinType}</small></span><strong>{money(p.price)}</strong><em>{p.rebate ? `리베이트 ${money(p.rebate)}` : '리베이트 없음'}</em>{!p.isVisible && <i>숨김</i>}</button>)}</div></section></section></AdminShell>
 }
 
+
+function ImageUploader({ image, uploading, onUpload }: { image: string; uploading: boolean; onUpload: (file: File) => void }) {
+  return <label className="image-upload-field">상품 이미지 업로드<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" disabled={uploading} onChange={(e) => { const file = e.target.files?.[0]; if (file) onUpload(file) }} /><span>{uploading ? '업로드 중...' : '이미지 파일 선택'}</span>{image && <img src={image} alt="업로드된 상품 이미지 미리보기" />}</label>
+}
 function AdminInput({ label, value, onChange, required }: { label: string; value: string; onChange: (v: string) => void; required?: boolean }) { return <label>{label}<input value={value} onChange={(e) => onChange(e.target.value)} required={required} /></label> }
 function AdminNumber({ label, value, onChange }: { label: string; value: number | null; onChange: (v: number | null) => void }) { return <label>{label}<input type="number" value={value ?? ''} onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))} /></label> }
 function Benefit({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) { return <article>{icon}<h3>{title}</h3><p>{text}</p></article> }
