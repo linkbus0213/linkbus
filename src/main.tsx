@@ -19,8 +19,9 @@ type CarrierKey = 'SKT' | 'KT' | 'LGU+'
 type CarrierMoney = Partial<Record<CarrierKey, number | null>>
 type RebateByCarrierJoin = Partial<Record<CarrierKey, Partial<Record<JoinType, number | null>>>>
 type PlanRebateByCarrier = Partial<Record<CarrierKey, Record<string, Partial<Record<JoinType, number | null>>>>>
+type PlanSupportByCarrier = Partial<Record<CarrierKey, Record<string, number | null>>>
 type VisiblePlansByCarrier = Partial<Record<CarrierKey, string[]>>
-type StorageOption = { label: string; price?: number | null; support?: number | null; rebate?: number | null; isVisible?: boolean; supportByCarrier?: CarrierMoney; rebateByCarrier?: CarrierMoney; rebateByCarrierJoin?: RebateByCarrierJoin; planRebateByCarrier?: PlanRebateByCarrier; visiblePlansByCarrier?: VisiblePlansByCarrier }
+type StorageOption = { label: string; price?: number | null; support?: number | null; rebate?: number | null; isVisible?: boolean; supportByCarrier?: CarrierMoney; rebateByCarrier?: CarrierMoney; rebateByCarrierJoin?: RebateByCarrierJoin; planRebateByCarrier?: PlanRebateByCarrier; visiblePlansByCarrier?: VisiblePlansByCarrier; planSupportByCarrier?: PlanSupportByCarrier }
 type Phone = {
   id: string; brand: Brand; series: string; carrier: Carrier; joinType: JoinType; name: string; subtitle: string; image: string
   price: number | null; rebate: number | null; monthly: number; support: number; badge: string; tag: string; isVisible?: boolean
@@ -40,6 +41,457 @@ const officialImages = {
 const defaultColors = (image: string): ColorOption[] => [{ name: '블랙', hex: '#1f2329', image }, { name: '화이트', hex: '#f2f2ee', image }, { name: '핑크', hex: '#f6d8dd', image }]
 const storagePresets = ['128G', '256G', '512G', '1TB', '2TB']
 const defaultStorages: StorageOption[] = [{ label: '256G', isVisible: true }]
+const excelStorageData: Record<string, StorageOption[]> = {
+  "iphone17e": [
+    {
+      "label": "256G",
+      "price": 990000,
+      "isVisible": true,
+      "supportByCarrier": {
+        "SKT": 138000,
+        "KT": 450000,
+        "LGU+": 230000
+      },
+      "planSupportByCarrier": {
+        "SKT": {
+          "5GX 플래티넘": 138000,
+          "5GX 프리미엄(T 우주)": 110000,
+          "5GX 레귤러플러스": 91000,
+          "0 청년 79": 91000,
+          "5GX 레귤러": 74000,
+          "베이직 플러스": 69000
+        },
+        "KT": {
+          "초이스 프리미엄": 450000,
+          "초이스 스페셜": 450000,
+          "초이스 베이직": 450000,
+          "베이직 80": 400000
+        },
+        "LGU+": {
+          "5G 시그니처": 230000,
+          "5G 프리미어 슈퍼": 204000,
+          "5G 프리미어 플러스": 186000,
+          "5G 스탠다드": 133000
+        }
+      },
+      "visiblePlansByCarrier": {
+        "SKT": [
+          "5GX 플래티넘",
+          "5GX 프리미엄(T 우주)",
+          "5GX 레귤러플러스",
+          "0 청년 79",
+          "5GX 레귤러",
+          "베이직 플러스"
+        ],
+        "KT": [
+          "초이스 프리미엄",
+          "초이스 스페셜",
+          "초이스 베이직",
+          "베이직 80"
+        ],
+        "LGU+": [
+          "5G 시그니처",
+          "5G 프리미어 슈퍼",
+          "5G 프리미어 플러스",
+          "5G 스탠다드"
+        ]
+      },
+      "rebateByCarrierJoin": {}
+    },
+    {
+      "label": "512G",
+      "price": 1287000,
+      "isVisible": true,
+      "supportByCarrier": {
+        "SKT": 138000,
+        "KT": 450000,
+        "LGU+": 230000
+      },
+      "planSupportByCarrier": {
+        "SKT": {
+          "5GX 플래티넘": 138000,
+          "5GX 프리미엄(T 우주)": 110000,
+          "5GX 레귤러플러스": 91000,
+          "0 청년 79": 91000,
+          "5GX 레귤러": 74000,
+          "베이직 플러스": 69000
+        },
+        "KT": {
+          "초이스 프리미엄": 450000,
+          "초이스 스페셜": 450000,
+          "초이스 베이직": 450000,
+          "베이직 80": 400000
+        },
+        "LGU+": {
+          "5G 시그니처": 230000,
+          "5G 프리미어 슈퍼": 204000,
+          "5G 프리미어 플러스": 186000,
+          "5G 스탠다드": 133000
+        }
+      },
+      "visiblePlansByCarrier": {
+        "SKT": [
+          "5GX 플래티넘",
+          "5GX 프리미엄(T 우주)",
+          "5GX 레귤러플러스",
+          "0 청년 79",
+          "5GX 레귤러",
+          "베이직 플러스"
+        ],
+        "KT": [
+          "초이스 프리미엄",
+          "초이스 스페셜",
+          "초이스 베이직",
+          "베이직 80"
+        ],
+        "LGU+": [
+          "5G 시그니처",
+          "5G 프리미어 슈퍼",
+          "5G 프리미어 플러스",
+          "5G 스탠다드"
+        ]
+      },
+      "rebateByCarrierJoin": {}
+    }
+  ],
+  "iphone17pm": [
+    {
+      "label": "256G",
+      "price": 1980000,
+      "isVisible": true,
+      "supportByCarrier": {
+        "SKT": 260000,
+        "KT": 250000,
+        "LGU+": 230000
+      },
+      "planSupportByCarrier": {
+        "SKT": {
+          "5GX 플래티넘": 260000,
+          "5GX 프리미엄(T 우주)": 150000,
+          "5GX 레귤러플러스": 135000,
+          "0 청년 79": 135000,
+          "5GX 레귤러": 118000,
+          "베이직 플러스": 112000
+        },
+        "KT": {
+          "초이스 프리미엄": 250000,
+          "초이스 스페셜": 201000,
+          "초이스 베이직": 150000,
+          "베이직 80": 147000
+        },
+        "LGU+": {
+          "5G 시그니처": 230000,
+          "5G 프리미어 슈퍼": 204000,
+          "5G 프리미어 플러스": 186000,
+          "5G 스탠다드": 133000
+        }
+      },
+      "visiblePlansByCarrier": {
+        "SKT": [
+          "5GX 플래티넘",
+          "5GX 프리미엄(T 우주)",
+          "5GX 레귤러플러스",
+          "0 청년 79",
+          "5GX 레귤러",
+          "베이직 플러스"
+        ],
+        "KT": [
+          "초이스 프리미엄",
+          "초이스 스페셜",
+          "초이스 베이직",
+          "베이직 80"
+        ],
+        "LGU+": [
+          "5G 시그니처",
+          "5G 프리미어 슈퍼",
+          "5G 프리미어 플러스",
+          "5G 스탠다드"
+        ]
+      },
+      "rebateByCarrierJoin": {}
+    },
+    {
+      "label": "512G",
+      "price": 2288000,
+      "isVisible": true,
+      "supportByCarrier": {
+        "SKT": 260000,
+        "KT": 250000,
+        "LGU+": 230000
+      },
+      "planSupportByCarrier": {
+        "SKT": {
+          "5GX 플래티넘": 260000,
+          "5GX 프리미엄(T 우주)": 150000,
+          "5GX 레귤러플러스": 135000,
+          "0 청년 79": 135000,
+          "5GX 레귤러": 118000,
+          "베이직 플러스": 112000
+        },
+        "KT": {
+          "초이스 프리미엄": 250000,
+          "초이스 스페셜": 201000,
+          "초이스 베이직": 150000,
+          "베이직 80": 147000
+        },
+        "LGU+": {
+          "5G 시그니처": 230000,
+          "5G 프리미어 슈퍼": 204000,
+          "5G 프리미어 플러스": 186000,
+          "5G 스탠다드": 133000
+        }
+      },
+      "visiblePlansByCarrier": {
+        "SKT": [
+          "5GX 플래티넘",
+          "5GX 프리미엄(T 우주)",
+          "5GX 레귤러플러스",
+          "0 청년 79",
+          "5GX 레귤러",
+          "베이직 플러스"
+        ],
+        "KT": [
+          "초이스 프리미엄",
+          "초이스 스페셜",
+          "초이스 베이직",
+          "베이직 80"
+        ],
+        "LGU+": [
+          "5G 시그니처",
+          "5G 프리미어 슈퍼",
+          "5G 프리미어 플러스",
+          "5G 스탠다드"
+        ]
+      },
+      "rebateByCarrierJoin": {}
+    },
+    {
+      "label": "1TB",
+      "price": 2585000,
+      "isVisible": true,
+      "supportByCarrier": {
+        "SKT": 260000,
+        "KT": 250000,
+        "LGU+": 230000
+      },
+      "planSupportByCarrier": {
+        "SKT": {
+          "5GX 플래티넘": 260000,
+          "5GX 프리미엄(T 우주)": 150000,
+          "5GX 레귤러플러스": 135000,
+          "0 청년 79": 135000,
+          "5GX 레귤러": 118000,
+          "베이직 플러스": 112000
+        },
+        "KT": {
+          "초이스 프리미엄": 250000,
+          "초이스 스페셜": 201000,
+          "초이스 베이직": 150000,
+          "베이직 80": 147000
+        },
+        "LGU+": {
+          "5G 시그니처": 230000,
+          "5G 프리미어 슈퍼": 204000,
+          "5G 프리미어 플러스": 186000,
+          "5G 스탠다드": 133000
+        }
+      },
+      "visiblePlansByCarrier": {
+        "SKT": [
+          "5GX 플래티넘",
+          "5GX 프리미엄(T 우주)",
+          "5GX 레귤러플러스",
+          "0 청년 79",
+          "5GX 레귤러",
+          "베이직 플러스"
+        ],
+        "KT": [
+          "초이스 프리미엄",
+          "초이스 스페셜",
+          "초이스 베이직",
+          "베이직 80"
+        ],
+        "LGU+": [
+          "5G 시그니처",
+          "5G 프리미어 슈퍼",
+          "5G 프리미어 플러스",
+          "5G 스탠다드"
+        ]
+      },
+      "rebateByCarrierJoin": {}
+    },
+    {
+      "label": "2TB",
+      "price": 3190000,
+      "isVisible": true,
+      "supportByCarrier": {
+        "SKT": 260000,
+        "KT": 250000
+      },
+      "planSupportByCarrier": {
+        "SKT": {
+          "5GX 플래티넘": 260000,
+          "5GX 프리미엄(T 우주)": 150000,
+          "5GX 레귤러플러스": 135000,
+          "0 청년 79": 135000,
+          "5GX 레귤러": 118000,
+          "베이직 플러스": 112000
+        },
+        "KT": {
+          "초이스 프리미엄": 250000,
+          "초이스 스페셜": 201000,
+          "초이스 베이직": 150000,
+          "베이직 80": 147000
+        }
+      },
+      "visiblePlansByCarrier": {
+        "SKT": [
+          "5GX 플래티넘",
+          "5GX 프리미엄(T 우주)",
+          "5GX 레귤러플러스",
+          "0 청년 79",
+          "5GX 레귤러",
+          "베이직 플러스"
+        ],
+        "KT": [
+          "초이스 프리미엄",
+          "초이스 스페셜",
+          "초이스 베이직",
+          "베이직 80"
+        ]
+      },
+      "rebateByCarrierJoin": {}
+    }
+  ],
+  "s26ultra": [
+    {
+      "label": "256G",
+      "price": 1797400,
+      "isVisible": true,
+      "supportByCarrier": {
+        "SKT": 580000,
+        "LGU+": 700000
+      },
+      "planSupportByCarrier": {
+        "SKT": {
+          "5GX 플래티넘": 580000,
+          "5GX 프리미엄(T 우주)": 580000,
+          "5GX 레귤러플러스": 553000,
+          "0 청년 79": 553000,
+          "5GX 레귤러": 520000,
+          "베이직 플러스": 495000
+        },
+        "LGU+": {
+          "5G 시그니처": 700000,
+          "5G 프리미어 슈퍼": 700000,
+          "5G 프리미어 플러스": 700000,
+          "5G 스탠다드": 618000
+        }
+      },
+      "visiblePlansByCarrier": {
+        "SKT": [
+          "5GX 플래티넘",
+          "5GX 프리미엄(T 우주)",
+          "5GX 레귤러플러스",
+          "0 청년 79",
+          "5GX 레귤러",
+          "베이직 플러스"
+        ],
+        "LGU+": [
+          "5G 시그니처",
+          "5G 프리미어 슈퍼",
+          "5G 프리미어 플러스",
+          "5G 스탠다드"
+        ]
+      },
+      "rebateByCarrierJoin": {}
+    },
+    {
+      "label": "512G",
+      "price": 2050400,
+      "isVisible": true,
+      "supportByCarrier": {
+        "SKT": 580000,
+        "LGU+": 700000
+      },
+      "planSupportByCarrier": {
+        "SKT": {
+          "5GX 플래티넘": 580000,
+          "5GX 프리미엄(T 우주)": 580000,
+          "5GX 레귤러플러스": 553000,
+          "0 청년 79": 553000,
+          "5GX 레귤러": 520000,
+          "베이직 플러스": 495000
+        },
+        "LGU+": {
+          "5G 시그니처": 700000,
+          "5G 프리미어 슈퍼": 700000,
+          "5G 프리미어 플러스": 700000,
+          "5G 스탠다드": 618000
+        }
+      },
+      "visiblePlansByCarrier": {
+        "SKT": [
+          "5GX 플래티넘",
+          "5GX 프리미엄(T 우주)",
+          "5GX 레귤러플러스",
+          "0 청년 79",
+          "5GX 레귤러",
+          "베이직 플러스"
+        ],
+        "LGU+": [
+          "5G 시그니처",
+          "5G 프리미어 슈퍼",
+          "5G 프리미어 플러스",
+          "5G 스탠다드"
+        ]
+      },
+      "rebateByCarrierJoin": {}
+    },
+    {
+      "label": "1TB",
+      "price": 2545400,
+      "isVisible": true,
+      "supportByCarrier": {
+        "SKT": 580000,
+        "LGU+": 700000
+      },
+      "planSupportByCarrier": {
+        "SKT": {
+          "5GX 플래티넘": 580000,
+          "5GX 프리미엄(T 우주)": 580000,
+          "5GX 레귤러플러스": 553000,
+          "0 청년 79": 553000,
+          "5GX 레귤러": 520000,
+          "베이직 플러스": 495000
+        },
+        "LGU+": {
+          "5G 시그니처": 700000,
+          "5G 프리미어 슈퍼": 700000,
+          "5G 프리미어 플러스": 700000,
+          "5G 스탠다드": 618000
+        }
+      },
+      "visiblePlansByCarrier": {
+        "SKT": [
+          "5GX 플래티넘",
+          "5GX 프리미엄(T 우주)",
+          "5GX 레귤러플러스",
+          "0 청년 79",
+          "5GX 레귤러",
+          "베이직 플러스"
+        ],
+        "LGU+": [
+          "5G 시그니처",
+          "5G 프리미어 슈퍼",
+          "5G 프리미어 플러스",
+          "5G 스탠다드"
+        ]
+      },
+      "rebateByCarrierJoin": {}
+    }
+  ]
+}
 
 type PlanOption = { carrier: CarrierKey; name: string; fee: number; data: string; voice: string; benefits: string[] }
 const carrierPlans: PlanOption[] = [
@@ -62,6 +514,7 @@ function normalizeCarrier(carrier: Carrier | string): CarrierKey { return carrie
 const carrierKeys: CarrierKey[] = ['SKT', 'KT', 'LGU+']
 const joinTypes: JoinType[] = ['번호이동', '기기변경', '신규가입']
 function carrierValue(values: CarrierMoney | undefined, carrier: CarrierKey, fallback?: number | null) { const value = values?.[carrier]; return value ?? fallback ?? 0 }
+function supportValue(storage: StorageOption | undefined, carrier: CarrierKey, fallback?: number | null, planName?: string) { return (planName ? storage?.planSupportByCarrier?.[carrier]?.[planName] : undefined) ?? carrierValue(storage?.supportByCarrier, carrier, fallback) }
 function rebateValue(storage: StorageOption | undefined, carrier: CarrierKey, joinType: JoinType, fallback?: number | null, planName?: string) { return (planName ? storage?.planRebateByCarrier?.[carrier]?.[planName]?.[joinType] : undefined) ?? storage?.rebateByCarrierJoin?.[carrier]?.[joinType] ?? storage?.rebateByCarrier?.[carrier] ?? storage?.rebate ?? fallback ?? 0 }
 function visiblePlansForStorage(storage: StorageOption | undefined, carrier: CarrierKey) { const names = storage?.visiblePlansByCarrier?.[carrier]; const plans = carrierPlans.filter((p) => p.carrier === carrier); return names?.length ? plans.filter((p) => names.includes(p.name)) : plans }
 function customerPrincipal(price?: number | null, support?: number | null, rebate?: number | null) { return Math.max(0, (price ?? 0) - (support ?? 0) - (rebate ?? 0)) }
@@ -81,9 +534,9 @@ function currentMonthProrated(monthly: number, now = new Date()) {
 
 
 const fallbackPhones: Phone[] = [
-  { id: 'iphone-17e', brand: '애플', series: 'iPhone 17 시리즈', carrier: 'SK', joinType: '번호이동', name: '아이폰 17e', subtitle: '128GB · 빠른 상담 가능', image: officialImages.iphone, price: 190000, rebate: 0, monthly: 69000, support: 620000, badge: '인기', tag: 'APPLE', isVisible: true, colors: defaultColors(officialImages.iphone), storages: defaultStorages },
-  { id: 'iphone-17-pro-max', brand: '애플', series: 'iPhone 17 시리즈', carrier: 'KT', joinType: '기기변경', name: '아이폰 17 프로맥스', subtitle: '256GB · 색상 상담', image: officialImages.iphonePro, price: 740000, rebate: 0, monthly: 99000, support: 760000, badge: '최신', tag: 'PRO', isVisible: true, colors: defaultColors(officialImages.iphonePro), storages: defaultStorages },
-  { id: 'galaxy-s26-ultra', brand: '삼성', series: 'Galaxy S26 시리즈', carrier: 'LG', joinType: '번호이동', name: '갤럭시 S26 울트라', subtitle: '256GB · 울트라 성능', image: officialImages.galaxy, price: 530000, rebate: 0, monthly: 95000, support: 880000, badge: '급상승', tag: 'SAMSUNG', isVisible: true, colors: defaultColors(officialImages.galaxy), storages: defaultStorages },
+  { id: 'iphone-17e', brand: '애플', series: 'iPhone 17 시리즈', carrier: 'SK', joinType: '번호이동', name: '아이폰 17e', subtitle: '128GB · 빠른 상담 가능', image: officialImages.iphone, price: 190000, rebate: 0, monthly: 69000, support: 620000, badge: '인기', tag: 'APPLE', isVisible: true, colors: defaultColors(officialImages.iphone), storages: excelStorageData.iphone17e },
+  { id: 'iphone-17-pro-max', brand: '애플', series: 'iPhone 17 시리즈', carrier: 'KT', joinType: '기기변경', name: '아이폰 17 프로맥스', subtitle: '256GB · 색상 상담', image: officialImages.iphonePro, price: 740000, rebate: 0, monthly: 99000, support: 760000, badge: '최신', tag: 'PRO', isVisible: true, colors: defaultColors(officialImages.iphonePro), storages: excelStorageData.iphone17pm },
+  { id: 'galaxy-s26-ultra', brand: '삼성', series: 'Galaxy S26 시리즈', carrier: 'LG', joinType: '번호이동', name: '갤럭시 S26 울트라', subtitle: '256GB · 울트라 성능', image: officialImages.galaxy, price: 530000, rebate: 0, monthly: 95000, support: 880000, badge: '급상승', tag: 'SAMSUNG', isVisible: true, colors: defaultColors(officialImages.galaxy), storages: excelStorageData.s26ultra },
 ]
 const brands: Array<Brand | '전체'> = ['전체', '애플', '삼성', '기타']
 const appleSeries = ['iPhone 17 시리즈', 'iPhone 16 시리즈', 'iPhone 15 시리즈']
@@ -93,7 +546,7 @@ const tips = ['아이폰17 / 갤럭시 S26 울트라 휴대폰 “0원폰”의 
 function money(value: number | null | undefined) { return value == null ? '상담가' : `${value.toLocaleString()}원` }
 function safeFileName(name: string) { return name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]/g, '-').replace(/-+/g, '-').toLowerCase() || 'image' }
 function cleanColors(colors?: ColorOption[] | null, image = officialImages.iphone) { return colors?.length ? colors.filter(c => c.name).map(c => ({ name: c.name, hex: c.hex || '#dddddd', image: c.image || image })) : defaultColors(image) }
-function cleanStorages(storages?: StorageOption[] | null) { return storages?.length ? storages.filter(s => s.label).map(s => ({ label: s.label, price: s.price ?? null, support: s.support ?? null, rebate: s.rebate ?? null, isVisible: s.isVisible ?? true, supportByCarrier: s.supportByCarrier || {}, rebateByCarrier: s.rebateByCarrier || {}, rebateByCarrierJoin: s.rebateByCarrierJoin || {}, planRebateByCarrier: s.planRebateByCarrier || {}, visiblePlansByCarrier: s.visiblePlansByCarrier || {} })) : defaultStorages }
+function cleanStorages(storages?: StorageOption[] | null) { return storages?.length ? storages.filter(s => s.label).map(s => ({ label: s.label, price: s.price ?? null, support: s.support ?? null, rebate: s.rebate ?? null, isVisible: s.isVisible ?? true, supportByCarrier: s.supportByCarrier || {}, rebateByCarrier: s.rebateByCarrier || {}, rebateByCarrierJoin: s.rebateByCarrierJoin || {}, planRebateByCarrier: s.planRebateByCarrier || {}, visiblePlansByCarrier: s.visiblePlansByCarrier || {}, planSupportByCarrier: s.planSupportByCarrier || {} })) : defaultStorages }
 function visibleStorages(phone: Phone) { const list = phone.storages.filter((s) => s.isVisible !== false); return list.length ? list : phone.storages.slice(0, 1) }
 function rowToPhone(row: ProductRow): Phone { const image = row.image_url || officialImages.iphone; return { id: row.id, brand: row.brand, series: row.series, carrier: row.carrier, joinType: row.join_type, name: row.name, subtitle: row.subtitle || '', image, price: row.sale_price, rebate: row.rebate, monthly: row.monthly_fee || 0, support: row.support_amount || 0, badge: row.badge || '추천', tag: row.tag || row.brand, isVisible: row.is_visible, colors: cleanColors(row.color_options, image), storages: cleanStorages(row.storage_options) } }
 function phoneToRow(phone: Phone) { return { brand: phone.brand, series: phone.series, carrier: phone.carrier, join_type: phone.joinType, name: phone.name, subtitle: phone.subtitle, image_url: phone.image, sale_price: phone.price, rebate: phone.rebate, monthly_fee: phone.monthly, support_amount: phone.support, badge: phone.badge, tag: phone.tag, is_visible: phone.isVisible ?? true, color_options: phone.colors, storage_options: phone.storages } }
@@ -175,6 +628,11 @@ function StorageEditor({ storages, onChange }: { storages: StorageOption[]; onCh
     const next = checked ? Array.from(new Set([...current, planName])) : current.filter((name) => name !== planName)
     setStorage(index, { visiblePlansByCarrier: { ...all, [carrier]: next } })
   }
+  const setPlanSupport = (index: number, carrier: CarrierKey, planName: string, value: number | null) => {
+    const all = storages[index]?.planSupportByCarrier || {}
+    const carrierRows = all[carrier] || {}
+    setStorage(index, { planSupportByCarrier: { ...all, [carrier]: { ...carrierRows, [planName]: value } } })
+  }
   const setPlanJoinRebate = (index: number, carrier: CarrierKey, planName: string, joinType: JoinType, value: number | null) => {
     const all = storages[index]?.planRebateByCarrier || {}
     const carrierRows = all[carrier] || {}
@@ -185,7 +643,7 @@ function StorageEditor({ storages, onChange }: { storages: StorageOption[]; onCh
     const sampleCarrier = 'SKT' as CarrierKey
     const sampleJoin = '번호이동' as JoinType
     const samplePrincipal = customerPrincipal(s.price, carrierValue(s.supportByCarrier, sampleCarrier, s.support), rebateValue(s, sampleCarrier, sampleJoin, s.rebate))
-    return <div className="storage-edit-card" key={i}><div className="storage-edit-row"><input value={s.label} onChange={(e) => setStorage(i, { label: e.target.value })} placeholder="256G"/><input type="number" value={s.price ?? ''} onChange={(e) => setStorage(i, { price: e.target.value === '' ? null : Number(e.target.value) })} placeholder="출고가"/><input type="number" value={s.support ?? ''} onChange={(e) => setStorage(i, { support: e.target.value === '' ? null : Number(e.target.value) })} placeholder="기본 공통지원금"/><input type="number" value={s.rebate ?? ''} onChange={(e) => setStorage(i, { rebate: e.target.value === '' ? null : Number(e.target.value) })} placeholder="기본 리베이트"/><label className="storage-visible"><input type="checkbox" checked={s.isVisible !== false} onChange={(e) => setStorage(i, { isVisible: e.target.checked })}/> 고객노출</label><button type="button" onClick={() => onChange(storages.filter((_, n) => n !== i))}>삭제</button></div><div className="carrier-support-grid join-rebate-grid">{carrierKeys.map((carrier) => { const plans = carrierPlans.filter((p) => p.carrier === carrier); const visibleNames = s.visiblePlansByCarrier?.[carrier] || plans.map((p) => p.name); return <div key={carrier}><b>{carrier}</b><input type="number" value={s.supportByCarrier?.[carrier] ?? ''} onChange={(e) => setCarrierMoney(i, 'supportByCarrier', carrier, e.target.value === '' ? null : Number(e.target.value))} placeholder="공통지원금"/><div className="plan-admin-list">{plans.map((plan) => { const checked = visibleNames.includes(plan.name); return <div className="plan-admin-row" key={plan.name}><label className="plan-visible"><input type="checkbox" checked={checked} onChange={(e) => setPlanVisible(i, carrier, plan.name, e.target.checked)}/><span>{plan.name}</span><em>{money(plan.fee)}</em></label><div className="join-rebate-fields">{joinTypes.map((type) => <label key={type}>{type}<input type="number" value={s.planRebateByCarrier?.[carrier]?.[plan.name]?.[type] ?? ''} onChange={(e) => setPlanJoinRebate(i, carrier, plan.name, type, e.target.value === '' ? null : Number(e.target.value))} placeholder="요금제 리베이트"/></label>)}</div></div> })}</div><small>선택 요금제는 고객 화면에 표시됩니다.</small></div> })}</div><p className="formula-note">계산식: 출고가 - 공통지원금 - 가입유형별 리베이트 = 고객구매가격(할부원금). 예: SKT 번호이동 기준 {money(samplePrincipal)}</p></div> })}</div>
+    return <div className="storage-edit-card" key={i}><div className="storage-edit-row"><input value={s.label} onChange={(e) => setStorage(i, { label: e.target.value })} placeholder="256G"/><input type="number" value={s.price ?? ''} onChange={(e) => setStorage(i, { price: e.target.value === '' ? null : Number(e.target.value) })} placeholder="출고가"/><input type="number" value={s.support ?? ''} onChange={(e) => setStorage(i, { support: e.target.value === '' ? null : Number(e.target.value) })} placeholder="기본 공통지원금"/><input type="number" value={s.rebate ?? ''} onChange={(e) => setStorage(i, { rebate: e.target.value === '' ? null : Number(e.target.value) })} placeholder="기본 리베이트"/><label className="storage-visible"><input type="checkbox" checked={s.isVisible !== false} onChange={(e) => setStorage(i, { isVisible: e.target.checked })}/> 고객노출</label><button type="button" onClick={() => onChange(storages.filter((_, n) => n !== i))}>삭제</button></div><div className="carrier-support-grid join-rebate-grid">{carrierKeys.map((carrier) => { const plans = carrierPlans.filter((p) => p.carrier === carrier); const visibleNames = s.visiblePlansByCarrier?.[carrier] || plans.map((p) => p.name); return <div key={carrier}><b>{carrier}</b><input type="number" value={s.supportByCarrier?.[carrier] ?? ''} onChange={(e) => setCarrierMoney(i, 'supportByCarrier', carrier, e.target.value === '' ? null : Number(e.target.value))} placeholder="공통지원금"/><div className="plan-admin-list">{plans.map((plan) => { const checked = visibleNames.includes(plan.name); return <div className="plan-admin-row" key={plan.name}><label className="plan-visible"><input type="checkbox" checked={checked} onChange={(e) => setPlanVisible(i, carrier, plan.name, e.target.checked)}/><span>{plan.name}</span><em>{money(plan.fee)}</em></label><input className="plan-support-input" type="number" value={s.planSupportByCarrier?.[carrier]?.[plan.name] ?? ''} onChange={(e) => setPlanSupport(i, carrier, plan.name, e.target.value === '' ? null : Number(e.target.value))} placeholder="요금제 공통지원금"/><div className="join-rebate-fields">{joinTypes.map((type) => <label key={type}>{type}<input type="number" value={s.planRebateByCarrier?.[carrier]?.[plan.name]?.[type] ?? ''} onChange={(e) => setPlanJoinRebate(i, carrier, plan.name, type, e.target.value === '' ? null : Number(e.target.value))} placeholder="요금제 리베이트"/></label>)}</div></div> })}</div><small>선택 요금제는 고객 화면에 표시됩니다.</small></div> })}</div><p className="formula-note">계산식: 출고가 - 공통지원금 - 가입유형별 리베이트 = 고객구매가격(할부원금). 예: SKT 번호이동 기준 {money(samplePrincipal)}</p></div> })}</div>
 }
 function AdminInput({ label, value, onChange, required }: { label: string; value: string; onChange: (v: string) => void; required?: boolean }) { return <label>{label}<input value={value} onChange={(e) => onChange(e.target.value)} required={required} /></label> }
 function AdminNumber({ label, value, onChange }: { label: string; value: number | null; onChange: (v: number | null) => void }) { return <label>{label}<input type="number" value={value ?? ''} onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))} /></label> }
@@ -203,7 +661,7 @@ function ProductDetail({ phone }: { phone: Phone }) {
   const plan = activePlans.find((p) => p.name === planName) || activePlans[0] || carrierPlans.find((p) => p.carrier === targetCarrier) || carrierPlans[0]
   const devicePrice = storage?.price ?? phone.price ?? 0
   const joinType: JoinType = currentCarrier === targetCarrier ? '기기변경' : '번호이동'
-  const support = carrierValue(storage?.supportByCarrier, targetCarrier, storage?.support ?? phone.support)
+  const support = supportValue(storage, targetCarrier, storage?.support ?? phone.support, plan.name)
   const rebate = rebateValue(storage, targetCarrier, joinType, phone.rebate, plan.name)
   const principal = customerPrincipal(devicePrice, support, rebate)
   const installment = installmentPayment(principal)
