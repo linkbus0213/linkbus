@@ -50,3 +50,5 @@
 .phone-caution-card h4,.phone-caution-card h5,.phone-caution-card .caution-lead{display:inline-block;width:auto;max-width:100%}.phone-caution-card h4,.phone-caution-card h5{clear:both}.phone-caution-card h4{margin-right:auto}.phone-caution-card h5{margin-right:auto}
 /* Put blue subsection labels below yellow section labels */
 .phone-caution-card h4{display:table!important;width:auto!important}.phone-caution-card h5{display:table!important;width:auto!important;margin-top:12px!important}
+/* Red highlights for critical caution phrases */
+.phone-caution-card mark{background:#ffe3e3;color:#e00000;border-radius:7px;padding:1px 5px;margin:0 1px;font-weight:900;text-decoration:none}.phone-caution-card .caution-number mark{box-shadow:inset 0 -8px 0 rgba(255,0,0,.12)}.phone-caution-card h4 mark,.phone-caution-card h5 mark,.phone-caution-card .caution-lead mark{background:#fff;color:#e00000;box-shadow:none}
