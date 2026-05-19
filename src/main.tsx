@@ -54,46 +54,30 @@ const excelStorageData: Record<string, StorageOption[]> = {
       },
       "planSupportByCarrier": {
         "SKT": {
-          "5GX 플래티넘": 138000,
-          "5GX 프리미엄(T 우주)": 110000,
-          "5GX 레귤러플러스": 91000,
-          "0 청년 79": 91000,
-          "5GX 레귤러": 74000,
-          "베이직 플러스": 69000
+          "5GX프리미엄": 110000,
         },
         "KT": {
-          "초이스 프리미엄": 450000,
-          "초이스 스페셜": 450000,
-          "초이스 베이직": 450000,
-          "베이직 80": 400000
+          "초이스스페셜": 450000,
+          "초이스베이직": 450000,
+          "베이직": 400000
         },
         "LGU+": {
-          "5G 시그니처": 230000,
-          "5G 프리미어 슈퍼": 204000,
-          "5G 프리미어 플러스": 186000,
-          "5G 스탠다드": 133000
+          "프리미어슈퍼": 204000,
+          "프리미어플러스": 186000,
         }
       },
       "visiblePlansByCarrier": {
         "SKT": [
-          "5GX 플래티넘",
-          "5GX 프리미엄(T 우주)",
-          "5GX 레귤러플러스",
-          "0 청년 79",
-          "5GX 레귤러",
-          "베이직 플러스"
+          "5GX프리미엄",
         ],
         "KT": [
-          "초이스 프리미엄",
-          "초이스 스페셜",
-          "초이스 베이직",
-          "베이직 80"
+          "초이스스페셜",
+          "초이스베이직",
+          "베이직"
         ],
         "LGU+": [
-          "5G 시그니처",
-          "5G 프리미어 슈퍼",
-          "5G 프리미어 플러스",
-          "5G 스탠다드"
+          "프리미어슈퍼",
+          "프리미어플러스",
         ]
       },
       "rebateByCarrierJoin": {}
@@ -109,46 +93,30 @@ const excelStorageData: Record<string, StorageOption[]> = {
       },
       "planSupportByCarrier": {
         "SKT": {
-          "5GX 플래티넘": 138000,
-          "5GX 프리미엄(T 우주)": 110000,
-          "5GX 레귤러플러스": 91000,
-          "0 청년 79": 91000,
-          "5GX 레귤러": 74000,
-          "베이직 플러스": 69000
+          "5GX프리미엄": 110000,
         },
         "KT": {
-          "초이스 프리미엄": 450000,
-          "초이스 스페셜": 450000,
-          "초이스 베이직": 450000,
-          "베이직 80": 400000
+          "초이스스페셜": 450000,
+          "초이스베이직": 450000,
+          "베이직": 400000
         },
         "LGU+": {
-          "5G 시그니처": 230000,
-          "5G 프리미어 슈퍼": 204000,
-          "5G 프리미어 플러스": 186000,
-          "5G 스탠다드": 133000
+          "프리미어슈퍼": 204000,
+          "프리미어플러스": 186000,
         }
       },
       "visiblePlansByCarrier": {
         "SKT": [
-          "5GX 플래티넘",
-          "5GX 프리미엄(T 우주)",
-          "5GX 레귤러플러스",
-          "0 청년 79",
-          "5GX 레귤러",
-          "베이직 플러스"
+          "5GX프리미엄",
         ],
         "KT": [
-          "초이스 프리미엄",
-          "초이스 스페셜",
-          "초이스 베이직",
-          "베이직 80"
+          "초이스스페셜",
+          "초이스베이직",
+          "베이직"
         ],
         "LGU+": [
-          "5G 시그니처",
-          "5G 프리미어 슈퍼",
-          "5G 프리미어 플러스",
-          "5G 스탠다드"
+          "프리미어슈퍼",
+          "프리미어플러스",
         ]
       },
       "rebateByCarrierJoin": {}
@@ -166,46 +134,30 @@ const excelStorageData: Record<string, StorageOption[]> = {
       },
       "planSupportByCarrier": {
         "SKT": {
-          "5GX 플래티넘": 260000,
-          "5GX 프리미엄(T 우주)": 150000,
-          "5GX 레귤러플러스": 135000,
-          "0 청년 79": 135000,
-          "5GX 레귤러": 118000,
-          "베이직 플러스": 112000
+          "5GX프리미엄": 150000,
         },
         "KT": {
-          "초이스 프리미엄": 250000,
-          "초이스 스페셜": 201000,
-          "초이스 베이직": 150000,
-          "베이직 80": 147000
+          "초이스스페셜": 201000,
+          "초이스베이직": 150000,
+          "베이직": 147000
         },
         "LGU+": {
-          "5G 시그니처": 230000,
-          "5G 프리미어 슈퍼": 204000,
-          "5G 프리미어 플러스": 186000,
-          "5G 스탠다드": 133000
+          "프리미어슈퍼": 204000,
+          "프리미어플러스": 186000,
         }
       },
       "visiblePlansByCarrier": {
         "SKT": [
-          "5GX 플래티넘",
-          "5GX 프리미엄(T 우주)",
-          "5GX 레귤러플러스",
-          "0 청년 79",
-          "5GX 레귤러",
-          "베이직 플러스"
+          "5GX프리미엄",
         ],
         "KT": [
-          "초이스 프리미엄",
-          "초이스 스페셜",
-          "초이스 베이직",
-          "베이직 80"
+          "초이스스페셜",
+          "초이스베이직",
+          "베이직"
         ],
         "LGU+": [
-          "5G 시그니처",
-          "5G 프리미어 슈퍼",
-          "5G 프리미어 플러스",
-          "5G 스탠다드"
+          "프리미어슈퍼",
+          "프리미어플러스",
         ]
       },
       "rebateByCarrierJoin": {}
@@ -221,46 +173,30 @@ const excelStorageData: Record<string, StorageOption[]> = {
       },
       "planSupportByCarrier": {
         "SKT": {
-          "5GX 플래티넘": 260000,
-          "5GX 프리미엄(T 우주)": 150000,
-          "5GX 레귤러플러스": 135000,
-          "0 청년 79": 135000,
-          "5GX 레귤러": 118000,
-          "베이직 플러스": 112000
+          "5GX프리미엄": 150000,
         },
         "KT": {
-          "초이스 프리미엄": 250000,
-          "초이스 스페셜": 201000,
-          "초이스 베이직": 150000,
-          "베이직 80": 147000
+          "초이스스페셜": 201000,
+          "초이스베이직": 150000,
+          "베이직": 147000
         },
         "LGU+": {
-          "5G 시그니처": 230000,
-          "5G 프리미어 슈퍼": 204000,
-          "5G 프리미어 플러스": 186000,
-          "5G 스탠다드": 133000
+          "프리미어슈퍼": 204000,
+          "프리미어플러스": 186000,
         }
       },
       "visiblePlansByCarrier": {
         "SKT": [
-          "5GX 플래티넘",
-          "5GX 프리미엄(T 우주)",
-          "5GX 레귤러플러스",
-          "0 청년 79",
-          "5GX 레귤러",
-          "베이직 플러스"
+          "5GX프리미엄",
         ],
         "KT": [
-          "초이스 프리미엄",
-          "초이스 스페셜",
-          "초이스 베이직",
-          "베이직 80"
+          "초이스스페셜",
+          "초이스베이직",
+          "베이직"
         ],
         "LGU+": [
-          "5G 시그니처",
-          "5G 프리미어 슈퍼",
-          "5G 프리미어 플러스",
-          "5G 스탠다드"
+          "프리미어슈퍼",
+          "프리미어플러스",
         ]
       },
       "rebateByCarrierJoin": {}
@@ -276,46 +212,30 @@ const excelStorageData: Record<string, StorageOption[]> = {
       },
       "planSupportByCarrier": {
         "SKT": {
-          "5GX 플래티넘": 260000,
-          "5GX 프리미엄(T 우주)": 150000,
-          "5GX 레귤러플러스": 135000,
-          "0 청년 79": 135000,
-          "5GX 레귤러": 118000,
-          "베이직 플러스": 112000
+          "5GX프리미엄": 150000,
         },
         "KT": {
-          "초이스 프리미엄": 250000,
-          "초이스 스페셜": 201000,
-          "초이스 베이직": 150000,
-          "베이직 80": 147000
+          "초이스스페셜": 201000,
+          "초이스베이직": 150000,
+          "베이직": 147000
         },
         "LGU+": {
-          "5G 시그니처": 230000,
-          "5G 프리미어 슈퍼": 204000,
-          "5G 프리미어 플러스": 186000,
-          "5G 스탠다드": 133000
+          "프리미어슈퍼": 204000,
+          "프리미어플러스": 186000,
         }
       },
       "visiblePlansByCarrier": {
         "SKT": [
-          "5GX 플래티넘",
-          "5GX 프리미엄(T 우주)",
-          "5GX 레귤러플러스",
-          "0 청년 79",
-          "5GX 레귤러",
-          "베이직 플러스"
+          "5GX프리미엄",
         ],
         "KT": [
-          "초이스 프리미엄",
-          "초이스 스페셜",
-          "초이스 베이직",
-          "베이직 80"
+          "초이스스페셜",
+          "초이스베이직",
+          "베이직"
         ],
         "LGU+": [
-          "5G 시그니처",
-          "5G 프리미어 슈퍼",
-          "5G 프리미어 플러스",
-          "5G 스탠다드"
+          "프리미어슈퍼",
+          "프리미어플러스",
         ]
       },
       "rebateByCarrierJoin": {}
@@ -330,34 +250,22 @@ const excelStorageData: Record<string, StorageOption[]> = {
       },
       "planSupportByCarrier": {
         "SKT": {
-          "5GX 플래티넘": 260000,
-          "5GX 프리미엄(T 우주)": 150000,
-          "5GX 레귤러플러스": 135000,
-          "0 청년 79": 135000,
-          "5GX 레귤러": 118000,
-          "베이직 플러스": 112000
+          "5GX프리미엄": 150000,
         },
         "KT": {
-          "초이스 프리미엄": 250000,
-          "초이스 스페셜": 201000,
-          "초이스 베이직": 150000,
-          "베이직 80": 147000
+          "초이스스페셜": 201000,
+          "초이스베이직": 150000,
+          "베이직": 147000
         }
       },
       "visiblePlansByCarrier": {
         "SKT": [
-          "5GX 플래티넘",
-          "5GX 프리미엄(T 우주)",
-          "5GX 레귤러플러스",
-          "0 청년 79",
-          "5GX 레귤러",
-          "베이직 플러스"
+          "5GX프리미엄",
         ],
         "KT": [
-          "초이스 프리미엄",
-          "초이스 스페셜",
-          "초이스 베이직",
-          "베이직 80"
+          "초이스스페셜",
+          "초이스베이직",
+          "베이직"
         ]
       },
       "rebateByCarrierJoin": {}
@@ -374,34 +282,20 @@ const excelStorageData: Record<string, StorageOption[]> = {
       },
       "planSupportByCarrier": {
         "SKT": {
-          "5GX 플래티넘": 580000,
-          "5GX 프리미엄(T 우주)": 580000,
-          "5GX 레귤러플러스": 553000,
-          "0 청년 79": 553000,
-          "5GX 레귤러": 520000,
-          "베이직 플러스": 495000
+          "5GX프리미엄": 580000,
         },
         "LGU+": {
-          "5G 시그니처": 700000,
-          "5G 프리미어 슈퍼": 700000,
-          "5G 프리미어 플러스": 700000,
-          "5G 스탠다드": 618000
+          "프리미어슈퍼": 700000,
+          "프리미어플러스": 700000,
         }
       },
       "visiblePlansByCarrier": {
         "SKT": [
-          "5GX 플래티넘",
-          "5GX 프리미엄(T 우주)",
-          "5GX 레귤러플러스",
-          "0 청년 79",
-          "5GX 레귤러",
-          "베이직 플러스"
+          "5GX프리미엄",
         ],
         "LGU+": [
-          "5G 시그니처",
-          "5G 프리미어 슈퍼",
-          "5G 프리미어 플러스",
-          "5G 스탠다드"
+          "프리미어슈퍼",
+          "프리미어플러스",
         ]
       },
       "rebateByCarrierJoin": {}
@@ -416,34 +310,20 @@ const excelStorageData: Record<string, StorageOption[]> = {
       },
       "planSupportByCarrier": {
         "SKT": {
-          "5GX 플래티넘": 580000,
-          "5GX 프리미엄(T 우주)": 580000,
-          "5GX 레귤러플러스": 553000,
-          "0 청년 79": 553000,
-          "5GX 레귤러": 520000,
-          "베이직 플러스": 495000
+          "5GX프리미엄": 580000,
         },
         "LGU+": {
-          "5G 시그니처": 700000,
-          "5G 프리미어 슈퍼": 700000,
-          "5G 프리미어 플러스": 700000,
-          "5G 스탠다드": 618000
+          "프리미어슈퍼": 700000,
+          "프리미어플러스": 700000,
         }
       },
       "visiblePlansByCarrier": {
         "SKT": [
-          "5GX 플래티넘",
-          "5GX 프리미엄(T 우주)",
-          "5GX 레귤러플러스",
-          "0 청년 79",
-          "5GX 레귤러",
-          "베이직 플러스"
+          "5GX프리미엄",
         ],
         "LGU+": [
-          "5G 시그니처",
-          "5G 프리미어 슈퍼",
-          "5G 프리미어 플러스",
-          "5G 스탠다드"
+          "프리미어슈퍼",
+          "프리미어플러스",
         ]
       },
       "rebateByCarrierJoin": {}
@@ -458,34 +338,20 @@ const excelStorageData: Record<string, StorageOption[]> = {
       },
       "planSupportByCarrier": {
         "SKT": {
-          "5GX 플래티넘": 580000,
-          "5GX 프리미엄(T 우주)": 580000,
-          "5GX 레귤러플러스": 553000,
-          "0 청년 79": 553000,
-          "5GX 레귤러": 520000,
-          "베이직 플러스": 495000
+          "5GX프리미엄": 580000,
         },
         "LGU+": {
-          "5G 시그니처": 700000,
-          "5G 프리미어 슈퍼": 700000,
-          "5G 프리미어 플러스": 700000,
-          "5G 스탠다드": 618000
+          "프리미어슈퍼": 700000,
+          "프리미어플러스": 700000,
         }
       },
       "visiblePlansByCarrier": {
         "SKT": [
-          "5GX 플래티넘",
-          "5GX 프리미엄(T 우주)",
-          "5GX 레귤러플러스",
-          "0 청년 79",
-          "5GX 레귤러",
-          "베이직 플러스"
+          "5GX프리미엄",
         ],
         "LGU+": [
-          "5G 시그니처",
-          "5G 프리미어 슈퍼",
-          "5G 프리미어 플러스",
-          "5G 스탠다드"
+          "프리미어슈퍼",
+          "프리미어플러스",
         ]
       },
       "rebateByCarrierJoin": {}
@@ -495,20 +361,20 @@ const excelStorageData: Record<string, StorageOption[]> = {
 
 type PlanOption = { carrier: CarrierKey; name: string; fee: number; data: string; voice: string; benefits: string[] }
 const carrierPlans: PlanOption[] = [
-  { carrier: 'SKT', name: '5GX 플래티넘', fee: 125000, data: '완전 무제한', voice: '기본제공 · 영상/부가 300분', benefits: ['우주패스/OTT 구독 혜택', '멤버십 VIP 등급', '스마트기기/데이터 쉐어링 할인'] },
-  { carrier: 'SKT', name: '5GX 프리미엄(T 우주)', fee: 109000, data: '완전 무제한', voice: '기본제공 · 영상/부가 300분', benefits: ['T 우주패스/제휴 구독 혜택 택1', '멤버십 VIP 등급', '스마트기기/데이터 쉐어링 할인'] },
-  { carrier: 'SKT', name: '5GX 레귤러플러스', fee: 79000, data: '250GB + 소진 후 속도제어', voice: '집/이동전화 무제한', benefits: ['5G 대용량 데이터', '기본 부가통화 제공'] },
-  { carrier: 'SKT', name: '0 청년 79', fee: 79000, data: '300GB + 소진 후 속도제어', voice: '집/이동전화 무제한', benefits: ['청년 전용 데이터 혜택', '스마트기기 이용요금 할인', '카페/영화/로밍 제휴 혜택'] },
-  { carrier: 'SKT', name: '5GX 레귤러', fee: 69000, data: '110GB + 소진 후 속도제어', voice: '집/이동전화 무제한', benefits: ['대표 5G 요금제', '기본 부가통화 제공'] },
-  { carrier: 'SKT', name: '베이직 플러스', fee: 59000, data: '24GB + 소진 후 속도제어', voice: '집/이동전화 무제한', benefits: ['실속형 5G 요금제', '기본 부가통화 제공'] },
-  { carrier: 'KT', name: '초이스 스페셜', fee: 130000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['프리미엄 콘텐츠 초이스', '멤버십 VIP', '스마트기기 할인'] },
-  { carrier: 'KT', name: '초이스 프리미엄', fee: 110000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['OTT/콘텐츠 초이스 혜택', '멤버십 VIP', '데이터 쉐어링 할인'] },
-  { carrier: 'KT', name: '초이스 베이직', fee: 90000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['콘텐츠 선택 혜택', '데이터 쉐어링 할인'] },
-  { carrier: 'KT', name: '베이직 80', fee: 80000, data: '무제한', voice: '집/이동전화 무제한', benefits: ['기본 데이터 무제한', '로밍/멤버십 기본 혜택'] },
-  { carrier: 'LGU+', name: '5G 시그니처', fee: 130000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['프리미엄 미디어 혜택', '멤버십 VIP', '스마트기기 할인'] },
-  { carrier: 'LGU+', name: '5G 프리미어 슈퍼', fee: 115000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['미디어/콘텐츠 혜택', '멤버십 VIP', '스마트기기 할인'] },
-  { carrier: 'LGU+', name: '5G 프리미어 플러스', fee: 105000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['미디어팩/콘텐츠 혜택', '데이터 쉐어링 할인'] },
-  { carrier: 'LGU+', name: '5G 스탠다드', fee: 75000, data: '150GB + 소진 후 속도제어', voice: '집/이동전화 무제한', benefits: ['실속 데이터 제공', '기본 멤버십 혜택'] },
+  { carrier: 'SKT', name: '5GX프리미엄', fee: 109000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['프리미엄 5G 데이터', '멤버십 VIP', '스마트기기/데이터 쉐어링 할인'] },
+  { carrier: 'SKT', name: '5GX프라임플러스', fee: 99000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['프라임급 5G 데이터', '콘텐츠/제휴 혜택', '스마트기기 할인'] },
+  { carrier: 'SKT', name: '5GX프라임', fee: 89000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['대표 5G 무제한 요금제', '기본 부가통화 제공'] },
+  { carrier: 'SKT', name: '0청년109', fee: 109000, data: '청년 전용 완전 무제한', voice: '집/이동전화 무제한', benefits: ['청년 전용 데이터/제휴 혜택', '멤버십/콘텐츠 혜택'] },
+  { carrier: 'SKT', name: '0청년99', fee: 99000, data: '청년 전용 완전 무제한', voice: '집/이동전화 무제한', benefits: ['청년 전용 데이터 혜택', '콘텐츠/제휴 혜택'] },
+  { carrier: 'SKT', name: '0청년89', fee: 89000, data: '청년 전용 무제한', voice: '집/이동전화 무제한', benefits: ['청년 전용 데이터 혜택', '기본 부가통화 제공'] },
+  { carrier: 'KT', name: '초이스스페셜', fee: 110000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['초이스 콘텐츠 혜택', '멤버십 VIP', '스마트기기 할인'] },
+  { carrier: 'KT', name: '스페셜', fee: 100000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['프리미엄 데이터', '멤버십/로밍 혜택'] },
+  { carrier: 'KT', name: '초이스베이직', fee: 90000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['초이스 기본 혜택', '데이터 쉐어링 할인'] },
+  { carrier: 'KT', name: '베이직', fee: 80000, data: '무제한', voice: '집/이동전화 무제한', benefits: ['기본 데이터 무제한', '멤버십 기본 혜택'] },
+  { carrier: 'LGU+', name: '프리미어슈퍼', fee: 115000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['프리미어 미디어 혜택', '멤버십 VIP', '스마트기기 할인'] },
+  { carrier: 'LGU+', name: '프리미어플러스', fee: 105000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['미디어/콘텐츠 혜택', '데이터 쉐어링 할인'] },
+  { carrier: 'LGU+', name: '프리미어레귤러', fee: 95000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['프리미어 기본 혜택', '데이터 쉐어링 할인'] },
+  { carrier: 'LGU+', name: '프리미어에센셜', fee: 85000, data: '대용량 5G 데이터', voice: '집/이동전화 무제한', benefits: ['실속형 프리미어 혜택', '기본 멤버십 혜택'] },
 ]
 function normalizeCarrier(carrier: Carrier | string): CarrierKey { return carrier === 'SK' ? 'SKT' : carrier === 'LG' ? 'LGU+' : carrier === 'KT' ? 'KT' : 'SKT' }
 const carrierKeys: CarrierKey[] = ['SKT', 'KT', 'LGU+']
@@ -516,7 +382,7 @@ const joinTypes: JoinType[] = ['번호이동', '기기변경', '신규가입']
 function carrierValue(values: CarrierMoney | undefined, carrier: CarrierKey, fallback?: number | null) { const value = values?.[carrier]; return value ?? fallback ?? 0 }
 function supportValue(storage: StorageOption | undefined, carrier: CarrierKey, fallback?: number | null, planName?: string) { return (planName ? storage?.planSupportByCarrier?.[carrier]?.[planName] : undefined) ?? carrierValue(storage?.supportByCarrier, carrier, fallback) }
 function rebateValue(storage: StorageOption | undefined, carrier: CarrierKey, joinType: JoinType, fallback?: number | null, planName?: string) { return (planName ? storage?.planRebateByCarrier?.[carrier]?.[planName]?.[joinType] : undefined) ?? storage?.rebateByCarrierJoin?.[carrier]?.[joinType] ?? storage?.rebateByCarrier?.[carrier] ?? storage?.rebate ?? fallback ?? 0 }
-function visiblePlansForStorage(storage: StorageOption | undefined, carrier: CarrierKey) { const names = storage?.visiblePlansByCarrier?.[carrier]; const plans = carrierPlans.filter((p) => p.carrier === carrier); return names?.length ? plans.filter((p) => names.includes(p.name)) : plans }
+function visiblePlansForStorage(storage: StorageOption | undefined, carrier: CarrierKey) { const names = storage?.visiblePlansByCarrier?.[carrier]; const plans = carrierPlans.filter((p) => p.carrier === carrier); const isHighPriceModel = (storage?.price ?? 0) > 650000; return isHighPriceModel || !names?.length ? plans : plans.filter((p) => names.includes(p.name)) }
 function customerPrincipal(price?: number | null, support?: number | null, rebate?: number | null) { return Math.max(0, (price ?? 0) - (support ?? 0) - (rebate ?? 0)) }
 function roundToTen(value: number) { return Math.round(value / 10) * 10 }
 function installmentPayment(principal: number, months = 24, annualRate = 0.059) {
