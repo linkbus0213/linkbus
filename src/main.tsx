@@ -43,6 +43,149 @@ const defaultColors = (image: string): ColorOption[] => [{ name: '블랙', hex: 
 const storagePresets = ['128G', '256G', '512G', '1TB', '2TB']
 const defaultStorages: StorageOption[] = [{ label: '256G', isVisible: true }]
 const excelStorageData: Record<string, StorageOption[]> = {
+  "iphone17pro": [
+    {
+      "label": "256G",
+      "price": 1782000,
+      "rebate": null,
+      "support": null,
+      "isVisible": true,
+      "supportByCarrier": {
+        "SKT": 450000,
+        "KT": 450000
+      },
+      "rebateByCarrier": {},
+      "rebateByCarrierJoin": {},
+      "planRebateByCarrier": {},
+      "planSupportByCarrier": {
+        "SKT": {
+          "5GX프리미엄": 450000,
+          "5GX프라임플러스": 430000,
+          "5GX프라임": 420000,
+          "0청년109": 420000,
+          "0청년99": 430000,
+          "0청년89": 420000
+        },
+        "KT": {
+          "초이스스페셜": 450000,
+          "스페셜": 450000,
+          "초이스베이직": 450000,
+          "베이직": 400000
+        }
+      },
+      "visiblePlansByCarrier": {
+        "SKT": [
+          "5GX프리미엄",
+          "5GX프라임플러스",
+          "5GX프라임",
+          "0청년109",
+          "0청년99",
+          "0청년89"
+        ],
+        "KT": [
+          "초이스스페셜",
+          "스페셜",
+          "초이스베이직",
+          "베이직"
+        ]
+      },
+      "newJoinVisibleByCarrier": {}
+    },
+    {
+      "label": "512G",
+      "price": 2090000,
+      "rebate": null,
+      "support": null,
+      "isVisible": true,
+      "supportByCarrier": {
+        "SKT": 450000,
+        "KT": 450000
+      },
+      "rebateByCarrier": {},
+      "rebateByCarrierJoin": {},
+      "planRebateByCarrier": {},
+      "planSupportByCarrier": {
+        "SKT": {
+          "5GX프리미엄": 450000,
+          "5GX프라임플러스": 430000,
+          "5GX프라임": 420000,
+          "0청년109": 420000,
+          "0청년99": 430000,
+          "0청년89": 420000
+        },
+        "KT": {
+          "초이스스페셜": 450000,
+          "스페셜": 450000,
+          "초이스베이직": 450000,
+          "베이직": 400000
+        }
+      },
+      "visiblePlansByCarrier": {
+        "SKT": [
+          "5GX프리미엄",
+          "5GX프라임플러스",
+          "5GX프라임",
+          "0청년109",
+          "0청년99",
+          "0청년89"
+        ],
+        "KT": [
+          "초이스스페셜",
+          "스페셜",
+          "초이스베이직",
+          "베이직"
+        ]
+      },
+      "newJoinVisibleByCarrier": {}
+    },
+    {
+      "label": "1TB",
+      "price": 2387000,
+      "rebate": null,
+      "support": null,
+      "isVisible": true,
+      "supportByCarrier": {
+        "SKT": 450000,
+        "KT": 450000
+      },
+      "rebateByCarrier": {},
+      "rebateByCarrierJoin": {},
+      "planRebateByCarrier": {},
+      "planSupportByCarrier": {
+        "SKT": {
+          "5GX프리미엄": 450000,
+          "5GX프라임플러스": 430000,
+          "5GX프라임": 420000,
+          "0청년109": 420000,
+          "0청년99": 430000,
+          "0청년89": 420000
+        },
+        "KT": {
+          "초이스스페셜": 450000,
+          "스페셜": 450000,
+          "초이스베이직": 450000,
+          "베이직": 400000
+        }
+      },
+      "visiblePlansByCarrier": {
+        "SKT": [
+          "5GX프리미엄",
+          "5GX프라임플러스",
+          "5GX프라임",
+          "0청년109",
+          "0청년99",
+          "0청년89"
+        ],
+        "KT": [
+          "초이스스페셜",
+          "스페셜",
+          "초이스베이직",
+          "베이직"
+        ]
+      },
+      "newJoinVisibleByCarrier": {}
+    }
+  ],
   "iphone17e": [
     {
       "label": "256G",
@@ -417,7 +560,7 @@ function safeFileName(name: string) { return name.normalize('NFKD').replace(/[^a
 function cleanColors(colors?: ColorOption[] | null, image = officialImages.iphone) { return colors?.length ? colors.filter(c => c.name).map(c => ({ name: c.name, hex: c.hex || '#dddddd', image: c.image || image })) : defaultColors(image) }
 function cleanStorages(storages?: StorageOption[] | null) { return storages?.length ? storages.filter(s => s.label).map(s => ({ label: s.label, price: s.price ?? null, support: s.support ?? null, rebate: s.rebate ?? null, isVisible: s.isVisible ?? true, supportByCarrier: s.supportByCarrier || {}, rebateByCarrier: s.rebateByCarrier || {}, rebateByCarrierJoin: s.rebateByCarrierJoin || {}, planRebateByCarrier: s.planRebateByCarrier || {}, visiblePlansByCarrier: s.visiblePlansByCarrier || {}, planSupportByCarrier: s.planSupportByCarrier || {}, newJoinVisibleByCarrier: s.newJoinVisibleByCarrier || {} })) : defaultStorages }
 function visibleStorages(phone: Phone) { const list = phone.storages.filter((s) => s.isVisible !== false); return list.length ? list : phone.storages.slice(0, 1) }
-function rowToPhone(row: ProductRow): Phone { const image = row.image_url || officialImages.iphone; return { id: row.id, brand: row.brand, series: row.series, carrier: row.carrier, joinType: row.join_type, name: row.name, subtitle: row.subtitle || '', image, price: row.sale_price, rebate: row.rebate, monthly: row.monthly_fee || 0, support: row.support_amount || 0, badge: row.badge || '추천', tag: row.tag || row.brand, isVisible: row.is_visible, colors: cleanColors(row.color_options, image), storages: cleanStorages(row.storage_options) } }
+function rowToPhone(row: ProductRow): Phone { const image = row.image_url || officialImages.iphone; const normalizedName = row.name.replace(/\s/g, ''); const importedStorages = normalizedName.includes('아이폰17프로') && !normalizedName.includes('맥스') ? excelStorageData.iphone17pro : undefined; const rowStorages = cleanStorages(row.storage_options); const hasPrices = rowStorages.some((s) => s.price || Object.keys(s.supportByCarrier || {}).length || Object.keys(s.planSupportByCarrier || {}).length); return { id: row.id, brand: row.brand, series: row.series, carrier: row.carrier, joinType: row.join_type, name: row.name, subtitle: row.subtitle || '', image, price: row.sale_price, rebate: row.rebate, monthly: row.monthly_fee || 0, support: row.support_amount || 0, badge: row.badge || '추천', tag: row.tag || row.brand, isVisible: row.is_visible, colors: cleanColors(row.color_options, image), storages: importedStorages && !hasPrices ? importedStorages : rowStorages } }
 function phoneToRow(phone: Phone) { return { brand: phone.brand, series: phone.series, carrier: phone.carrier, join_type: phone.joinType, name: phone.name, subtitle: phone.subtitle, image_url: phone.image, sale_price: phone.price, rebate: phone.rebate, monthly_fee: phone.monthly, support_amount: phone.support, badge: phone.badge, tag: phone.tag, is_visible: phone.isVisible ?? true, color_options: phone.colors, storage_options: phone.storages } }
 
 
