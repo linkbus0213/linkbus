@@ -1,198 +1,212 @@
 import React, { useMemo, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createClient } from '@supabase/supabase-js'
-import { CheckCircle2, ChevronRight, Menu, PhoneCall, Search, ShieldCheck, Smartphone, Sparkles, Star, X } from 'lucide-react'
+import { ChevronRight, Headphones, MessageCircle, PlayCircle, Search, ShieldCheck, Smartphone, Sparkles, Star, Store, X } from 'lucide-react'
 import './style.css'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
+const kakaoChannelUrl = (import.meta.env.VITE_KAKAO_CHANNEL_URL as string | undefined) || ''
 const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null
 
+type Brand = '애플' | '삼성' | '기타'
 type Carrier = 'SK' | 'KT' | 'LG' | '알뜰폰'
 type JoinType = '번호이동' | '기기변경' | '신규가입'
 type Phone = {
   id: string
-  brand: 'Apple' | 'Samsung' | '기타'
+  brand: Brand
+  series: string
   carrier: Carrier
   joinType: JoinType
   name: string
-  storage: string
-  color: string
-  plan: string
-  monthlyFee: number
-  devicePrice: number
+  subtitle: string
+  image: string
+  price: number | null
+  monthly: number
   support: number
-  customerPrice: number | null
   badge: string
-  stock: '상담가능' | '예약가능' | '재고확인' | '품절'
+  tag: string
+}
+
+const officialImages = {
+  iphonePro: 'https://www.apple.com/v/iphone-17-pro/f/images/meta/iphone-17-pro_overview__eumhhclcpuaa_og.png?202604301049',
+  iphone: 'https://www.apple.com/v/iphone-17/f/images/meta/iphone-17_overview__cg0rlzmbhl7m_og.png?202604301049',
+  galaxy: 'https://images.samsung.com/kdp/st/1/17875ef3-e132-4a7e-abfb-2622dd6c8a9c.jpg',
 }
 
 const phones: Phone[] = [
-  { id: 'ip17-pro', brand: 'Apple', carrier: 'SK', joinType: '번호이동', name: 'iPhone 17 Pro', storage: '256GB', color: '내추럴', plan: '프리미엄 요금제 기준', monthlyFee: 99000, devicePrice: 1550000, support: 620000, customerPrice: 930000, badge: '인기', stock: '상담가능' },
-  { id: 'ip17', brand: 'Apple', carrier: 'KT', joinType: '기기변경', name: 'iPhone 17', storage: '128GB', color: '블랙', plan: '베이직 요금제 상담', monthlyFee: 69000, devicePrice: 1250000, support: 420000, customerPrice: 830000, badge: '추천', stock: '재고확인' },
-  { id: 's26-ultra', brand: 'Samsung', carrier: 'LG', joinType: '번호이동', name: 'Galaxy S26 Ultra', storage: '256GB', color: '티타늄', plan: '5G 프리미엄 기준', monthlyFee: 95000, devicePrice: 1690000, support: 760000, customerPrice: 930000, badge: '최신', stock: '상담가능' },
-  { id: 's26', brand: 'Samsung', carrier: 'SK', joinType: '신규가입', name: 'Galaxy S26', storage: '256GB', color: '실버', plan: '상담 후 최적 요금제', monthlyFee: 79000, devicePrice: 1190000, support: 520000, customerPrice: 670000, badge: '실속', stock: '예약가능' },
-  { id: 'a-series', brand: 'Samsung', carrier: '알뜰폰', joinType: '신규가입', name: 'Galaxy A 시리즈', storage: '128GB', color: '상담', plan: '알뜰폰 요금제', monthlyFee: 33000, devicePrice: 499000, support: 210000, customerPrice: 289000, badge: '알뜰', stock: '상담가능' },
-  { id: 'kids', brand: '기타', carrier: 'KT', joinType: '신규가입', name: '키즈폰 추천 모델', storage: '64GB', color: '상담', plan: '자녀 안심 요금제', monthlyFee: 22000, devicePrice: 300000, support: 180000, customerPrice: 120000, badge: '키즈', stock: '재고확인' },
+  { id: 'iphone-17e', brand: '애플', series: 'iPhone 17 시리즈', carrier: 'SK', joinType: '번호이동', name: '아이폰 17e', subtitle: '128GB · 빠른 상담 가능', image: officialImages.iphone, price: 190000, monthly: 69000, support: 620000, badge: '인기', tag: 'APPLE' },
+  { id: 'iphone-17-pro-max', brand: '애플', series: 'iPhone 17 시리즈', carrier: 'KT', joinType: '기기변경', name: '아이폰 17 프로맥스', subtitle: '256GB · 색상 상담', image: officialImages.iphonePro, price: 740000, monthly: 99000, support: 760000, badge: '최신', tag: 'PRO' },
+  { id: 'iphone-17-pro', brand: '애플', series: 'iPhone 17 시리즈', carrier: 'LG', joinType: '번호이동', name: '아이폰 17 프로', subtitle: '256GB · 재고 확인', image: officialImages.iphonePro, price: 620000, monthly: 95000, support: 680000, badge: '추천', tag: 'HOT' },
+  { id: 'iphone-17', brand: '애플', series: 'iPhone 17 시리즈', carrier: 'SK', joinType: '신규가입', name: '아이폰 17', subtitle: '128GB · 입문 추천', image: officialImages.iphone, price: 420000, monthly: 79000, support: 520000, badge: '실속', tag: 'BASIC' },
+  { id: 'galaxy-s26-ultra', brand: '삼성', series: 'Galaxy S26 시리즈', carrier: 'LG', joinType: '번호이동', name: '갤럭시 S26 울트라', subtitle: '256GB · 울트라 성능', image: officialImages.galaxy, price: 530000, monthly: 95000, support: 880000, badge: '급상승', tag: 'SAMSUNG' },
+  { id: 'galaxy-s26', brand: '삼성', series: 'Galaxy S26 시리즈', carrier: 'KT', joinType: '기기변경', name: '갤럭시 S26', subtitle: '256GB · 합리적 선택', image: officialImages.galaxy, price: 170000, monthly: 79000, support: 720000, badge: '특가', tag: 'VALUE' },
 ]
 
-const carriers: Array<Carrier | '전체'> = ['전체', 'SK', 'KT', 'LG', '알뜰폰']
-const joinTypes: Array<JoinType | '전체'> = ['전체', '번호이동', '기기변경', '신규가입']
-const brands: Array<Phone['brand'] | '전체'> = ['전체', 'Apple', 'Samsung', '기타']
+const brands: Array<Brand | '전체'> = ['전체', '애플', '삼성', '기타']
+const appleSeries = ['iPhone 17 시리즈', 'iPhone 16 시리즈', 'iPhone 15 시리즈']
+const samsungSeries = ['Galaxy S26 시리즈', 'Galaxy Z 시리즈', 'Galaxy A 시리즈']
+const tips = [
+  '아이폰17 / 갤럭시 S26 울트라 휴대폰 “0원폰”의 진실',
+  '26년 5월 SK텔레콤 라이트 할부 카드 이벤트 안내',
+  '휴대폰 신청시 주의해야 할 점 feat. 부가서비스',
+  '휴대폰 개통시 주의해야 할 점 feat. 제휴카드',
+  'KT 총액 결합할인 제도 쉽게 알아보기',
+]
 
 function money(value: number | null) {
-  if (value === null) return '상담가'
-  return `${value.toLocaleString()}원`
+  return value === null ? '상담가' : `${value.toLocaleString()}원`
 }
 
 function App() {
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [brand, setBrand] = useState<Brand | '전체'>('애플')
+  const [series, setSeries] = useState('iPhone 17 시리즈')
   const [query, setQuery] = useState('')
-  const [carrier, setCarrier] = useState<Carrier | '전체'>('전체')
-  const [joinType, setJoinType] = useState<JoinType | '전체'>('전체')
-  const [brand, setBrand] = useState<Phone['brand'] | '전체'>('전체')
   const [selected, setSelected] = useState<Phone | null>(null)
 
+  const seriesList = brand === '삼성' ? samsungSeries : appleSeries
   const filtered = useMemo(() => phones.filter((phone) => {
-    const haystack = [phone.name, phone.storage, phone.color, phone.plan, phone.badge, phone.carrier, phone.joinType, phone.brand].join(' ').toLowerCase()
-    return (carrier === '전체' || phone.carrier === carrier)
-      && (joinType === '전체' || phone.joinType === joinType)
-      && (brand === '전체' || phone.brand === brand)
-      && haystack.includes(query.toLowerCase())
-  }), [query, carrier, joinType, brand])
+    const matchBrand = brand === '전체' || phone.brand === brand
+    const matchSeries = brand === '전체' || phone.series === series
+    const haystack = `${phone.name} ${phone.subtitle} ${phone.carrier} ${phone.joinType} ${phone.brand}`.toLowerCase()
+    return matchBrand && matchSeries && haystack.includes(query.toLowerCase())
+  }), [brand, series, query])
+
+  function chooseBrand(next: Brand | '전체') {
+    setBrand(next)
+    setSeries(next === '삼성' ? samsungSeries[0] : appleSeries[0])
+  }
 
   return <>
-    <header className="site-header">
-      <a className="logo" href="#top"><span>LINK</span>BUS</a>
-      <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="메뉴">{menuOpen ? <X/> : <Menu/>}</button>
-      <nav className={menuOpen ? 'open' : ''}>
-        <a href="#phones">가격보기</a>
-        <a href="#guide">구매안내</a>
-        <a href="#faq">FAQ</a>
-        <a className="nav-cta" href="#consult">상담신청</a>
+    <header className="topbar">
+      <div className="top-inner">
+        <a className="brand-logo" href="#top"><span>LINK</span>BUS</a>
+        <a className="login-link" href="#consult">로그인/회원가입</a>
+      </div>
+      <nav className="menu-line">
+        {['AI차트', '최저가비교', '애플', '삼성', '기타', '유심전용', '인터넷/IPTV', '리뷰', '질문답변', '이벤트', '고객센터'].map((item) => <a key={item} href={item === '애플' || item === '삼성' ? '#popular' : '#consult'}>{item}</a>)}
       </nav>
     </header>
 
     <main id="top">
-      <section className="hero">
-        <div className="hero-copy">
-          <p className="eyebrow">ONLINE PHONE STORE</p>
-          <h1>휴대폰 구매,<br/>조건 비교부터 상담까지 한 번에.</h1>
-          <p className="hero-text">linkbus.kr 전용 휴대폰 판매 사이트 초안입니다. 고객이 가격을 보고, 조건을 비교하고, 상담 신청까지 자연스럽게 이어지도록 설계했습니다.</p>
-          <div className="hero-actions">
-            <a className="primary" href="#phones"><Smartphone size={19}/> 인기 상품 보기</a>
-            <a className="secondary" href="#consult"><PhoneCall size={19}/> 무료 상담 신청</a>
-          </div>
-        </div>
-        <aside className="hero-panel">
-          <span className="live-badge"><Sparkles size={15}/> 오늘의 상담 포인트</span>
-          <h2>요금제·통신사·가입유형에 따라 실제 구매가가 달라져요.</h2>
-          <p>표시 금액은 예시 기준이며, 최종 조건은 상담 후 확정됩니다.</p>
-          <div className="mini-stats">
-            <div><b>통신사</b><strong>SK · KT · LG</strong></div>
-            <div><b>가입유형</b><strong>번호이동 · 기변 · 신규</strong></div>
-            <div><b>상담</b><strong>온라인 접수</strong></div>
-          </div>
-        </aside>
-      </section>
-
-      <section className="trust-row">
-        <Trust icon={<CheckCircle2/>} title="조건 비교" desc="통신사별 조건을 한눈에 정리" />
-        <Trust icon={<ShieldCheck/>} title="안전한 안내" desc="상담 후 최종 금액 확정" />
-        <Trust icon={<Star/>} title="맞춤 추천" desc="사용 패턴에 맞는 모델/요금제" />
-      </section>
-
-      <section id="phones" className="section">
-        <div className="section-head">
+      <section className="hero-slider">
+        <article className="hero-banner dark">
           <div>
-            <p className="eyebrow">POPULAR</p>
-            <h2>인기 판매 상품</h2>
-            <p>나중에 관리자 페이지와 DB를 붙이면 이 상품 목록은 직접 수정할 수 있게 만들 예정입니다.</p>
+            <p>사전예약 · 특별혜택</p>
+            <h1>아이폰 17 Pro<br/>지금 조건 비교</h1>
+            <a href="#popular">모델 보러가기 <ChevronRight size={18}/></a>
           </div>
-        </div>
-        <label className="search-box"><Search size={17}/><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="아이폰, 갤럭시, 요금제 검색" /></label>
-        <Filter title="브랜드" values={brands} current={brand} setCurrent={setBrand} />
-        <Filter title="통신사" values={carriers} current={carrier} setCurrent={setCarrier} />
-        <Filter title="가입유형" values={joinTypes} current={joinType} setCurrent={setJoinType} />
-        <div className="phone-grid">
-          {filtered.map((phone) => <PhoneCard key={phone.id} phone={phone} onSelect={() => setSelected(phone)} />)}
-        </div>
-        {!filtered.length && <p className="empty">조건에 맞는 상품이 없습니다. 검색어나 필터를 바꿔보세요.</p>}
-      </section>
-
-      <section id="guide" className="section guide">
-        <article>
-          <p className="eyebrow">HOW TO BUY</p>
-          <h2>구매 진행 순서</h2>
-          <ol>
-            <li>원하는 모델과 통신사를 선택합니다.</li>
-            <li>상담 신청으로 현재 조건과 재고를 확인합니다.</li>
-            <li>최종 실구매가와 요금제를 안내받습니다.</li>
-            <li>신청서 작성 후 개통을 진행합니다.</li>
-          </ol>
+          <img src={officialImages.iphonePro} alt="아이폰 17 프로" />
         </article>
-        <article id="consult" className="consult-card">
-          <p className="eyebrow">CONSULT</p>
-          <h2>상담 신청</h2>
-          <ConsultForm selected={selected?.name || ''} />
+        <article className="hero-banner light">
+          <div>
+            <p>전 통신사 견적 비교</p>
+            <h1>갤럭시 S26<br/>최저 조건 상담</h1>
+            <a href="#popular">혜택 확인하기 <ChevronRight size={18}/></a>
+          </div>
+          <img src={officialImages.galaxy} alt="갤럭시 S26" />
         </article>
       </section>
 
-      <section id="faq" className="section faq">
-        <p className="eyebrow">FAQ</p>
-        <h2>자주 묻는 질문</h2>
-        <details open><summary>표시 가격 그대로 구매할 수 있나요?</summary><p>표시 금액은 예시 조건입니다. 통신사 정책, 요금제, 재고 상황에 따라 달라질 수 있어 상담 후 확정됩니다.</p></details>
-        <details><summary>번호이동과 기기변경 차이가 뭔가요?</summary><p>번호이동은 통신사를 바꾸는 가입이고, 기기변경은 같은 통신사를 유지하며 단말기를 바꾸는 방식입니다.</p></details>
-        <details><summary>온라인으로 바로 개통 가능한가요?</summary><p>1차 상담 접수 후 본인확인과 신청서 작성 절차를 거쳐 진행합니다.</p></details>
+      <section id="popular" className="popular-section">
+        <div className="section-title">
+          <h2>인기 급상승 상품</h2>
+          <p>모델을 누르면 상세 조건과 카카오톡 상담 버튼을 확인할 수 있어요.</p>
+        </div>
+        <div className="brand-tabs">
+          {brands.map((item) => <button key={item} className={brand === item ? 'active' : ''} onClick={() => chooseBrand(item)}>{item === '애플' ? '애플 | APPLE' : item === '삼성' ? '삼성 | SAMSUNG' : item}</button>)}
+        </div>
+        {brand !== '전체' && <div className="series-tabs">
+          {seriesList.map((item) => <button key={item} className={series === item ? 'active' : ''} onClick={() => setSeries(item)}>{item}</button>)}
+        </div>}
+        <label className="search-pill"><Search size={17}/><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="모델명, 통신사, 가입유형 검색" /></label>
+        <div className="phone-strip">
+          {filtered.map((phone) => <button className="product-tile" key={phone.id} onClick={() => setSelected(phone)}>
+            <span className="ribbon">{phone.badge}</span>
+            <figure><img src={phone.image} alt={phone.name}/></figure>
+            <b>{phone.name}</b>
+            <small>{phone.subtitle}</small>
+            <strong>{money(phone.price)}</strong>
+          </button>)}
+          {!filtered.length && <p className="empty">조건에 맞는 상품이 없습니다.</p>}
+        </div>
+      </section>
+
+      <section className="consult-cta">
+        <div>
+          <p>최저가 보장 · 숨은 조건 없음</p>
+          <h3>어떤 폰이 나에게 맞을지 모르겠다면?</h3>
+        </div>
+        <div>
+          <a href="#popular">기기 비교하기</a>
+          <a className="kakao" href="#consult"><MessageCircle size={18}/> 무료 상담 신청</a>
+        </div>
+      </section>
+
+      <section className="content-grid">
+        <article className="curation">
+          <div className="block-head"><h2>놓치면 아까운 꿀팁! 링크버스 큐레이션</h2><a href="#consult">더보기 <ChevronRight size={16}/></a></div>
+          <div className="tip-list">{tips.map((tip) => <a key={tip} href="#consult"><span>핫이슈</span>{tip}<ChevronRight size={16}/></a>)}</div>
+        </article>
+        <article className="phone-tube">
+          <h2>휴대폰의 모든 것을 한눈에 보다. 링크튜브</h2>
+          <div className="video-row">
+            {['갤럭시 S26 실사용 후기', '통신사 혜택 비교', '아이폰 17 구매 가이드'].map((title, i) => <div className="video-card" key={title}><div className={`thumb t${i}`}><PlayCircle/></div><b>{title}</b></div>)}
+          </div>
+        </article>
+      </section>
+
+      <section id="consult" className="consult-area">
+        <div className="benefits">
+          <Benefit icon={<Star/>} title="최저가 보장" text="전 통신사 조건을 비교해 합리적인 가격을 안내합니다." />
+          <Benefit icon={<ShieldCheck/>} title="안전한 구매" text="상담 후 조건을 확정하고 신청 절차를 안내합니다." />
+          <Benefit icon={<Headphones/>} title="전문 상담" text="기기·요금제·가입유형을 맞춤 추천합니다." />
+        </div>
+        <ConsultForm selected={selected?.name || ''} />
       </section>
     </main>
 
-    {selected && <ProductModal phone={selected} onClose={() => setSelected(null)} />}
-
-    <footer>
-      <strong>LINKBUS</strong>
-      <p>상호/사업자 정보/통신판매업 신고번호는 실제 사업자 가입 후 입력합니다.</p>
-      <p>Copyright © linkbus.kr. All rights reserved.</p>
+    <footer className="footer">
+      <div className="footer-call"><h4>구매 문의 관련 상담</h4><strong>카카오톡 상담 / 전화 상담 준비중</strong><p>평일 10:00 ~ 18:00 · 토요일 10:00 ~ 15:00</p></div>
+      <div><b>LINKBUS</b><p>상호/사업자 정보/통신판매업 신고번호는 실제 사업자 가입 후 입력합니다.</p></div>
     </footer>
+
+    {selected && <ProductModal phone={selected} onClose={() => setSelected(null)} />}
   </>
 }
 
-function Trust({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
-  return <article>{icon}<h3>{title}</h3><p>{desc}</p></article>
+function Benefit({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
+  return <article>{icon}<h3>{title}</h3><p>{text}</p></article>
 }
 
-function Filter<T extends string>({ title, values, current, setCurrent }: { title: string; values: readonly T[]; current: T; setCurrent: (v: T) => void }) {
-  return <div className="filters"><b>{title}</b>{values.map((value) => <button key={value} className={current === value ? 'active' : ''} onClick={() => setCurrent(value)}>{value}</button>)}</div>
-}
-
-function PhoneCard({ phone, onSelect }: { phone: Phone; onSelect: () => void }) {
-  return <article className="phone-card">
-    <div className="badges"><span>{phone.carrier}</span><span>{phone.joinType}</span><b>{phone.badge}</b></div>
-    <h3>{phone.name}</h3>
-    <p>{phone.storage} · {phone.color}</p>
-    <strong>{money(phone.customerPrice)}</strong>
-    <small>월 요금 {money(phone.monthlyFee)} · 지원금 {money(phone.support)}</small>
-    <em>{phone.stock}</em>
-    <button onClick={onSelect}>자세히 보기 <ChevronRight size={16}/></button>
-  </article>
+function kakaoHref(model: string) {
+  if (!kakaoChannelUrl) return '#consult'
+  const sep = kakaoChannelUrl.includes('?') ? '&' : '?'
+  return `${kakaoChannelUrl}${sep}text=${encodeURIComponent(`${model} 상담하고 싶어요`)}`
 }
 
 function ProductModal({ phone, onClose }: { phone: Phone; onClose: () => void }) {
   return <div className="modal-backdrop" onClick={onClose}>
-    <section className="product-modal" onClick={(e) => e.stopPropagation()}>
+    <section className="detail-modal" onClick={(e) => e.stopPropagation()}>
       <button className="close" onClick={onClose}><X/></button>
-      <div className="badges"><span>{phone.carrier}</span><span>{phone.joinType}</span><b>{phone.badge}</b></div>
-      <h2>{phone.name}</h2>
-      <p className="modal-sub">{phone.storage} · {phone.color} · {phone.plan}</p>
-      <div className="price-row"><span>예상 실구매가</span><strong>{money(phone.customerPrice)}</strong></div>
-      <div className="detail-list">
-        <div><span>출고가</span><b>{money(phone.devicePrice)}</b></div>
-        <div><span>예상 지원금</span><b>{money(phone.support)}</b></div>
-        <div><span>월 요금</span><b>{money(phone.monthlyFee)}</b></div>
-        <div><span>재고상태</span><b>{phone.stock}</b></div>
+      <div className="modal-media"><img src={phone.image} alt={phone.name}/></div>
+      <div className="modal-copy">
+        <span className="tag">{phone.tag}</span>
+        <h2>{phone.name}</h2>
+        <p>{phone.subtitle}</p>
+        <div className="price-box"><span>예상 구매가</span><strong>{money(phone.price)}</strong></div>
+        <ul>
+          <li><span>통신사</span><b>{phone.carrier}</b></li>
+          <li><span>가입유형</span><b>{phone.joinType}</b></li>
+          <li><span>월 요금</span><b>{money(phone.monthly)}</b></li>
+          <li><span>예상 지원금</span><b>{money(phone.support)}</b></li>
+        </ul>
+        <p className="notice">표시 금액은 예시 조건입니다. 최종 조건은 정책·재고·요금제 확인 후 확정됩니다.</p>
+        <div className="modal-actions">
+          <a className="kakao-talk" href={kakaoHref(phone.name)} onClick={() => !kakaoChannelUrl && setTimeout(() => document.getElementById('consult')?.scrollIntoView({ behavior: 'smooth' }), 0)}><MessageCircle size={19}/> 카카오톡 상담하기</a>
+          <a className="outline" href="#consult" onClick={onClose}>상담 신청서 작성</a>
+        </div>
       </div>
-      <p className="notice">정확한 금액은 통신사 정책, 요금제, 부가 조건, 재고 상태 확인 후 확정됩니다.</p>
-      <a className="primary full" href="#consult" onClick={onClose}>이 모델로 상담 신청</a>
     </section>
   </div>
 }
@@ -205,52 +219,37 @@ function ConsultForm({ selected }: { selected: string }) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
 
-  React.useEffect(() => {
-    setModel(selected)
-  }, [selected])
+  React.useEffect(() => setModel(selected), [selected])
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setStatus('sending')
     setMessage('')
-
     if (!supabase) {
       setStatus('error')
-      setMessage('상담 저장 설정이 아직 연결되지 않았습니다. 화면과 기능 확인용 초안입니다.')
+      setMessage('상담 저장 설정이 아직 연결되지 않았습니다.')
       return
     }
-
-    const { error } = await supabase.from('consult_requests').insert({
-      name,
-      phone,
-      desired_model: model || null,
-      join_type: joinType,
-      source: 'linkbus.kr',
-      status: 'new',
-    })
-
+    const { error } = await supabase.from('consult_requests').insert({ name, phone, desired_model: model || null, join_type: joinType, source: 'linkbus.kr', status: 'new' })
     if (error) {
       setStatus('error')
       setMessage('저장 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.')
       return
     }
-
     setStatus('success')
     setMessage('상담 신청이 접수되었습니다. 확인 후 연락드릴게요.')
-    setName('')
-    setPhone('')
-    setModel('')
-    setJoinType('번호이동')
+    setName(''); setPhone(''); setModel(''); setJoinType('번호이동')
   }
 
   return <form className="consult-form" onSubmit={submit}>
+    <div className="form-title"><Store/><div><p>무료 상담 신청</p><h2>현재 조건과 재고를 확인해드려요</h2></div></div>
     <label>이름<input value={name} onChange={(e) => setName(e.target.value)} placeholder="홍길동" required /></label>
     <label>연락처<input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="010-0000-0000" required /></label>
-    <label>희망 모델<input value={model} onChange={(e) => setModel(e.target.value)} placeholder="예: iPhone 17 Pro" /></label>
+    <label>희망 모델<input value={model} onChange={(e) => setModel(e.target.value)} placeholder="예: 아이폰 17 프로" /></label>
     <label>가입유형<select value={joinType} onChange={(e) => setJoinType(e.target.value as JoinType)}><option>번호이동</option><option>기기변경</option><option>신규가입</option></select></label>
     <label className="agree"><input type="checkbox" required /> 개인정보 수집·이용에 동의합니다.</label>
     {message && <p className={`form-message ${status}`}>{message}</p>}
-    <button className="primary full" type="submit" disabled={status === 'sending'}>{status === 'sending' ? '접수 중...' : '상담 신청하기'}</button>
+    <button className="submit" type="submit" disabled={status === 'sending'}>{status === 'sending' ? '접수 중...' : '상담 신청하기'}</button>
   </form>
 }
 
