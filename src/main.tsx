@@ -20,9 +20,10 @@ type CarrierMoney = Partial<Record<CarrierKey, number | null>>
 type RebateByCarrierJoin = Partial<Record<CarrierKey, Partial<Record<JoinType, number | null>>>>
 type PlanRebateByCarrier = Partial<Record<CarrierKey, Record<string, Partial<Record<JoinType, number | null>>>>>
 type PlanSupportByCarrier = Partial<Record<CarrierKey, Record<string, number | null>>>
+type PlanSupportByCarrierJoin = Partial<Record<CarrierKey, Record<string, Partial<Record<JoinType, number | null>>>>>
 type VisiblePlansByCarrier = Partial<Record<CarrierKey, string[]>>
 type NewJoinVisibleByCarrier = Partial<Record<CarrierKey, boolean>>
-type StorageOption = { label: string; price?: number | null; support?: number | null; rebate?: number | null; isVisible?: boolean; supportByCarrier?: CarrierMoney; rebateByCarrier?: CarrierMoney; rebateByCarrierJoin?: RebateByCarrierJoin; planRebateByCarrier?: PlanRebateByCarrier; visiblePlansByCarrier?: VisiblePlansByCarrier; planSupportByCarrier?: PlanSupportByCarrier; newJoinVisibleByCarrier?: NewJoinVisibleByCarrier }
+type StorageOption = { label: string; price?: number | null; support?: number | null; rebate?: number | null; isVisible?: boolean; supportByCarrier?: CarrierMoney; rebateByCarrier?: CarrierMoney; rebateByCarrierJoin?: RebateByCarrierJoin; planRebateByCarrier?: PlanRebateByCarrier; visiblePlansByCarrier?: VisiblePlansByCarrier; planSupportByCarrier?: PlanSupportByCarrier; planSupportByCarrierJoin?: PlanSupportByCarrierJoin; newJoinVisibleByCarrier?: NewJoinVisibleByCarrier }
 type Phone = {
   id: string; brand: Brand; series: string; carrier: Carrier; joinType: JoinType; name: string; subtitle: string; image: string
   price: number | null; rebate: number | null; monthly: number; support: number; badge: string; tag: string; isVisible?: boolean
@@ -52,7 +53,8 @@ const excelStorageData: Record<string, StorageOption[]> = {
       "isVisible": true,
       "supportByCarrier": {
         "SKT": 450000,
-        "KT": 450000
+        "KT": 450000,
+        "LGU+": 550000
       },
       "rebateByCarrier": {},
       "rebateByCarrierJoin": {},
@@ -71,6 +73,12 @@ const excelStorageData: Record<string, StorageOption[]> = {
           "스페셜": 450000,
           "초이스베이직": 450000,
           "베이직": 400000
+        },
+        "LGU+": {
+          "프리미어슈퍼": 550000,
+          "프리미어플러스": 550000,
+          "프리미어레귤러": 550000,
+          "프리미어에센셜": 550000
         }
       },
       "visiblePlansByCarrier": {
@@ -87,9 +95,39 @@ const excelStorageData: Record<string, StorageOption[]> = {
           "스페셜",
           "초이스베이직",
           "베이직"
+        ],
+        "LGU+": [
+          "프리미어슈퍼",
+          "프리미어플러스",
+          "프리미어레귤러",
+          "프리미어에센셜"
         ]
       },
-      "newJoinVisibleByCarrier": {}
+      "newJoinVisibleByCarrier": {},
+      "planSupportByCarrierJoin": {
+        "LGU+": {
+          "프리미어슈퍼": {
+            "번호이동": 550000,
+            "기기변경": 450000,
+            "신규가입": 450000
+          },
+          "프리미어플러스": {
+            "번호이동": 550000,
+            "기기변경": 450000,
+            "신규가입": 450000
+          },
+          "프리미어레귤러": {
+            "번호이동": 550000,
+            "기기변경": 450000,
+            "신규가입": 450000
+          },
+          "프리미어에센셜": {
+            "번호이동": 550000,
+            "기기변경": 450000,
+            "신규가입": 450000
+          }
+        }
+      }
     },
     {
       "label": "512G",
@@ -99,7 +137,8 @@ const excelStorageData: Record<string, StorageOption[]> = {
       "isVisible": true,
       "supportByCarrier": {
         "SKT": 450000,
-        "KT": 450000
+        "KT": 450000,
+        "LGU+": 550000
       },
       "rebateByCarrier": {},
       "rebateByCarrierJoin": {},
@@ -118,6 +157,12 @@ const excelStorageData: Record<string, StorageOption[]> = {
           "스페셜": 450000,
           "초이스베이직": 450000,
           "베이직": 400000
+        },
+        "LGU+": {
+          "프리미어슈퍼": 550000,
+          "프리미어플러스": 550000,
+          "프리미어레귤러": 550000,
+          "프리미어에센셜": 550000
         }
       },
       "visiblePlansByCarrier": {
@@ -134,9 +179,39 @@ const excelStorageData: Record<string, StorageOption[]> = {
           "스페셜",
           "초이스베이직",
           "베이직"
+        ],
+        "LGU+": [
+          "프리미어슈퍼",
+          "프리미어플러스",
+          "프리미어레귤러",
+          "프리미어에센셜"
         ]
       },
-      "newJoinVisibleByCarrier": {}
+      "newJoinVisibleByCarrier": {},
+      "planSupportByCarrierJoin": {
+        "LGU+": {
+          "프리미어슈퍼": {
+            "번호이동": 550000,
+            "기기변경": 450000,
+            "신규가입": 450000
+          },
+          "프리미어플러스": {
+            "번호이동": 550000,
+            "기기변경": 450000,
+            "신규가입": 450000
+          },
+          "프리미어레귤러": {
+            "번호이동": 550000,
+            "기기변경": 450000,
+            "신규가입": 450000
+          },
+          "프리미어에센셜": {
+            "번호이동": 550000,
+            "기기변경": 450000,
+            "신규가입": 450000
+          }
+        }
+      }
     },
     {
       "label": "1TB",
@@ -146,7 +221,8 @@ const excelStorageData: Record<string, StorageOption[]> = {
       "isVisible": true,
       "supportByCarrier": {
         "SKT": 450000,
-        "KT": 450000
+        "KT": 450000,
+        "LGU+": 550000
       },
       "rebateByCarrier": {},
       "rebateByCarrierJoin": {},
@@ -165,6 +241,12 @@ const excelStorageData: Record<string, StorageOption[]> = {
           "스페셜": 450000,
           "초이스베이직": 450000,
           "베이직": 400000
+        },
+        "LGU+": {
+          "프리미어슈퍼": 550000,
+          "프리미어플러스": 550000,
+          "프리미어레귤러": 550000,
+          "프리미어에센셜": 550000
         }
       },
       "visiblePlansByCarrier": {
@@ -181,9 +263,39 @@ const excelStorageData: Record<string, StorageOption[]> = {
           "스페셜",
           "초이스베이직",
           "베이직"
+        ],
+        "LGU+": [
+          "프리미어슈퍼",
+          "프리미어플러스",
+          "프리미어레귤러",
+          "프리미어에센셜"
         ]
       },
-      "newJoinVisibleByCarrier": {}
+      "newJoinVisibleByCarrier": {},
+      "planSupportByCarrierJoin": {
+        "LGU+": {
+          "프리미어슈퍼": {
+            "번호이동": 550000,
+            "기기변경": 450000,
+            "신규가입": 450000
+          },
+          "프리미어플러스": {
+            "번호이동": 550000,
+            "기기변경": 450000,
+            "신규가입": 450000
+          },
+          "프리미어레귤러": {
+            "번호이동": 550000,
+            "기기변경": 450000,
+            "신규가입": 450000
+          },
+          "프리미어에센셜": {
+            "번호이동": 550000,
+            "기기변경": 450000,
+            "신규가입": 450000
+          }
+        }
+      }
     }
   ],
   "iphone17e": [
@@ -526,7 +638,7 @@ const joinTypes: JoinType[] = ['번호이동', '기기변경', '신규가입']
 const defaultPlanNames: Record<CarrierKey, string> = { SKT: '5GX프리미엄', KT: '초이스스페셜', 'LGU+': '프리미어슈퍼' }
 function defaultPlanName(carrier: CarrierKey) { return defaultPlanNames[carrier] }
 function carrierValue(values: CarrierMoney | undefined, carrier: CarrierKey, fallback?: number | null) { const value = values?.[carrier]; return value ?? fallback ?? 0 }
-function supportValue(storage: StorageOption | undefined, carrier: CarrierKey, fallback?: number | null, planName?: string) { return (planName ? storage?.planSupportByCarrier?.[carrier]?.[planName] : undefined) ?? carrierValue(storage?.supportByCarrier, carrier, fallback) }
+function supportValue(storage: StorageOption | undefined, carrier: CarrierKey, joinType: JoinType, fallback?: number | null, planName?: string) { return (planName ? storage?.planSupportByCarrierJoin?.[carrier]?.[planName]?.[joinType] : undefined) ?? (planName ? storage?.planSupportByCarrier?.[carrier]?.[planName] : undefined) ?? carrierValue(storage?.supportByCarrier, carrier, fallback) }
 function rebateValue(storage: StorageOption | undefined, carrier: CarrierKey, joinType: JoinType, fallback?: number | null, planName?: string) { return (planName ? storage?.planRebateByCarrier?.[carrier]?.[planName]?.[joinType] : undefined) ?? storage?.rebateByCarrierJoin?.[carrier]?.[joinType] ?? storage?.rebateByCarrier?.[carrier] ?? storage?.rebate ?? fallback ?? 0 }
 function visiblePlansForStorage(storage: StorageOption | undefined, carrier: CarrierKey) { const names = storage?.visiblePlansByCarrier?.[carrier]; const plans = carrierPlans.filter((p) => p.carrier === carrier); const isHighPriceModel = (storage?.price ?? 0) > 650000; return isHighPriceModel || !names?.length ? plans : plans.filter((p) => names.includes(p.name)) }
 function customerPrincipal(price?: number | null, support?: number | null, rebate?: number | null) { return Math.max(0, (price ?? 0) - (support ?? 0) - (rebate ?? 0)) }
@@ -558,7 +670,7 @@ const tips = ['아이폰17 / 갤럭시 S26 울트라 휴대폰 “0원폰”의 
 function money(value: number | null | undefined) { return value == null ? '상담가' : `${value.toLocaleString()}원` }
 function safeFileName(name: string) { return name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]/g, '-').replace(/-+/g, '-').toLowerCase() || 'image' }
 function cleanColors(colors?: ColorOption[] | null, image = officialImages.iphone) { return colors?.length ? colors.filter(c => c.name).map(c => ({ name: c.name, hex: c.hex || '#dddddd', image: c.image || image })) : defaultColors(image) }
-function cleanStorages(storages?: StorageOption[] | null) { return storages?.length ? storages.filter(s => s.label).map(s => ({ label: s.label, price: s.price ?? null, support: s.support ?? null, rebate: s.rebate ?? null, isVisible: s.isVisible ?? true, supportByCarrier: s.supportByCarrier || {}, rebateByCarrier: s.rebateByCarrier || {}, rebateByCarrierJoin: s.rebateByCarrierJoin || {}, planRebateByCarrier: s.planRebateByCarrier || {}, visiblePlansByCarrier: s.visiblePlansByCarrier || {}, planSupportByCarrier: s.planSupportByCarrier || {}, newJoinVisibleByCarrier: s.newJoinVisibleByCarrier || {} })) : defaultStorages }
+function cleanStorages(storages?: StorageOption[] | null) { return storages?.length ? storages.filter(s => s.label).map(s => ({ label: s.label, price: s.price ?? null, support: s.support ?? null, rebate: s.rebate ?? null, isVisible: s.isVisible ?? true, supportByCarrier: s.supportByCarrier || {}, rebateByCarrier: s.rebateByCarrier || {}, rebateByCarrierJoin: s.rebateByCarrierJoin || {}, planRebateByCarrier: s.planRebateByCarrier || {}, visiblePlansByCarrier: s.visiblePlansByCarrier || {}, planSupportByCarrier: s.planSupportByCarrier || {}, planSupportByCarrierJoin: s.planSupportByCarrierJoin || {}, newJoinVisibleByCarrier: s.newJoinVisibleByCarrier || {} })) : defaultStorages }
 function visibleStorages(phone: Phone) { const list = phone.storages.filter((s) => s.isVisible !== false); return list.length ? list : phone.storages.slice(0, 1) }
 function rowToPhone(row: ProductRow): Phone { const image = row.image_url || officialImages.iphone; const normalizedName = row.name.replace(/\s/g, ''); const importedStorages = normalizedName.includes('아이폰17프로') && !normalizedName.includes('맥스') ? excelStorageData.iphone17pro : undefined; const rowStorages = cleanStorages(row.storage_options); const hasPrices = rowStorages.some((s) => s.price || Object.keys(s.supportByCarrier || {}).length || Object.keys(s.planSupportByCarrier || {}).length); return { id: row.id, brand: row.brand, series: row.series, carrier: row.carrier, joinType: row.join_type, name: row.name, subtitle: row.subtitle || '', image, price: row.sale_price, rebate: row.rebate, monthly: row.monthly_fee || 0, support: row.support_amount || 0, badge: row.badge || '추천', tag: row.tag || row.brand, isVisible: row.is_visible, colors: cleanColors(row.color_options, image), storages: importedStorages && !hasPrices ? importedStorages : rowStorages } }
 function phoneToRow(phone: Phone) { return { brand: phone.brand, series: phone.series, carrier: phone.carrier, join_type: phone.joinType, name: phone.name, subtitle: phone.subtitle, image_url: phone.image, sale_price: phone.price, rebate: phone.rebate, monthly_fee: phone.monthly, support_amount: phone.support, badge: phone.badge, tag: phone.tag, is_visible: phone.isVisible ?? true, color_options: phone.colors, storage_options: phone.storages } }
@@ -681,7 +793,7 @@ function ProductDetail({ phone }: { phone: Phone }) {
   const plan = activePlans.find((p) => p.name === planName) || defaultPlan
   const devicePrice = storage?.price ?? phone.price ?? 0
   const joinType: JoinType = currentCarrier === '신규가입' ? '신규가입' : currentCarrier === targetCarrier ? '기기변경' : '번호이동'
-  const support = supportValue(storage, targetCarrier, storage?.support ?? phone.support, plan.name)
+  const support = supportValue(storage, targetCarrier, joinType, storage?.support ?? phone.support, plan.name)
   const rebate = rebateValue(storage, targetCarrier, joinType, phone.rebate, plan.name)
   const principal = customerPrincipal(devicePrice, support, rebate)
   const installment = installmentPayment(principal)
