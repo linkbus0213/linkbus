@@ -84,7 +84,7 @@ function App() {
         <a className="login-link" href="#consult">로그인/회원가입</a>
       </div>
       <nav className="menu-line">
-        {['AI차트', '최저가비교', '애플', '삼성', '기타', '유심전용', '인터넷/IPTV', '리뷰', '질문답변', '이벤트', '고객센터'].map((item) => <a key={item} href={item === '애플' || item === '삼성' ? '#popular' : '#consult'}>{item}</a>)}
+        {['애플', '삼성', '기타', '유심전용', '인터넷/IPTV', '리뷰', '질문답변', '이벤트', '고객센터'].map((item) => <a key={item} href={item === '애플' || item === '삼성' ? '#popular' : '#consult'}>{item}</a>)}
       </nav>
     </header>
 
