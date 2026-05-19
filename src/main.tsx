@@ -783,7 +783,19 @@ function Benefit({ icon, title, text }: { icon: React.ReactNode; title: string; 
 function kakaoHref(model: string) { if (!kakaoChannelUrl) return '/#consult'; const sep = kakaoChannelUrl.includes('?') ? '&' : '?'; return `${kakaoChannelUrl}${sep}text=${encodeURIComponent(`${model} 상담하고 싶어요`)}` }
 
 function HighlightText({ text }: { text: string }) {
-  const keywords = ['절대 불가', '전액 반환', '할인반환금', '위약금', '진행 불가', '개통 불가', '반품 절대 불가', '출고가 일시 납부', '책임지지 않습니다', '피해보상 청구 소송', '미개봉 필수', '원복 절대 불가능']
+  const keywords = [
+    '약정기간은 24개월 입니다.',
+    '해지 시 위약금 발생',
+    '링크버스가 제공한 할인 및 추가지원금 전액 반환',
+    '링크버스가 제공한 할인 및 추가지원금 전액반환',
+    '이보다 낮은 요금제 변경시 할인반환금 청구',
+    '위약금&잔여할부금 조회 불가 및 책임지지 않습니다.',
+    '개통 전 미개봉 필수',
+    '단말기 박스 개봉시 (개통전이라도) 교환 / 반품 절대 불가 합니다',
+    '단말기 박스 개봉시(개통전이라도) 교환/반품 절대 불가합니다',
+    '미개봉&미개통시만 교환 및 반품 가능합니다.',
+    '미개봉&미개통시에만 교환 및 반품 가능합니다',
+  ]
   const pattern = new RegExp(`(${keywords.map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g')
   return <>{text.split(pattern).map((part, index) => keywords.includes(part) ? <mark key={index}>{part}</mark> : <React.Fragment key={index}>{part}</React.Fragment>)}</>
 }
