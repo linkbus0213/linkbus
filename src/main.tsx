@@ -35,6 +35,32 @@ const officialImages = {
 const defaultColors = (image: string): ColorOption[] => [{ name: '블랙', hex: '#1f2329', image }, { name: '화이트', hex: '#f2f2ee', image }, { name: '핑크', hex: '#f6d8dd', image }]
 const defaultStorages: StorageOption[] = [{ label: '256G' }, { label: '512G' }]
 
+type PlanOption = { carrier: string; name: string; fee: number; data: string; voice: string; benefits: string[] }
+const carrierPlans: PlanOption[] = [
+  { carrier: 'SKT', name: '5GX 프리미엄(T 우주)', fee: 109000, data: '완전 무제한', voice: '기본제공 · 영상/부가 300분', benefits: ['T 우주패스/제휴 구독 혜택 택1', '멤버십 VIP 등급', '스마트기기/데이터 쉐어링 할인'] },
+  { carrier: 'SKT', name: '0 청년 79', fee: 79000, data: '300GB + 소진 후 속도제어', voice: '집/이동전화 무제한', benefits: ['청년 전용 데이터 혜택', '스마트기기 이용요금 할인', '카페/영화/로밍 제휴 혜택'] },
+  { carrier: 'SKT', name: '베이직 플러스', fee: 59000, data: '24GB + 소진 후 속도제어', voice: '집/이동전화 무제한', benefits: ['실속형 5G 요금제', '기본 부가통화 제공'] },
+  { carrier: 'KT', name: '초이스 프리미엄', fee: 110000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['OTT/콘텐츠 초이스 혜택', '멤버십 VIP', '데이터 쉐어링 할인'] },
+  { carrier: 'KT', name: '베이직 80', fee: 80000, data: '무제한', voice: '집/이동전화 무제한', benefits: ['기본 데이터 무제한', '로밍/멤버십 기본 혜택'] },
+  { carrier: 'LGU+', name: '5G 프리미어 슈퍼', fee: 115000, data: '완전 무제한', voice: '집/이동전화 무제한', benefits: ['미디어/콘텐츠 혜택', '멤버십 VIP', '스마트기기 할인'] },
+  { carrier: 'LGU+', name: '5G 스탠다드', fee: 75000, data: '150GB + 소진 후 속도제어', voice: '집/이동전화 무제한', benefits: ['실속 데이터 제공', '기본 멤버십 혜택'] },
+]
+function normalizeCarrier(carrier: Carrier | string) { return carrier === 'SK' ? 'SKT' : carrier === 'LG' ? 'LGU+' : carrier }
+function roundToTen(value: number) { return Math.round(value / 10) * 10 }
+function installmentPayment(principal: number, months = 24, annualRate = 0.059) {
+  if (principal <= 0) return { principal: 0, monthly: 0, interest: 0, total: 0 }
+  const r = annualRate / 12
+  const monthly = roundToTen(principal * r * Math.pow(1 + r, months) / (Math.pow(1 + r, months) - 1))
+  const total = monthly * months
+  return { principal, monthly, interest: Math.max(0, total - principal), total }
+}
+function currentMonthProrated(monthly: number, now = new Date()) {
+  const days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
+  const remain = days - now.getDate() + 1
+  return Math.round(monthly * remain / days)
+}
+
+
 const fallbackPhones: Phone[] = [
   { id: 'iphone-17e', brand: '애플', series: 'iPhone 17 시리즈', carrier: 'SK', joinType: '번호이동', name: '아이폰 17e', subtitle: '128GB · 빠른 상담 가능', image: officialImages.iphone, price: 190000, rebate: 0, monthly: 69000, support: 620000, badge: '인기', tag: 'APPLE', isVisible: true, colors: defaultColors(officialImages.iphone), storages: defaultStorages },
   { id: 'iphone-17-pro-max', brand: '애플', series: 'iPhone 17 시리즈', carrier: 'KT', joinType: '기기변경', name: '아이폰 17 프로맥스', subtitle: '256GB · 색상 상담', image: officialImages.iphonePro, price: 740000, rebate: 0, monthly: 99000, support: 760000, badge: '최신', tag: 'PRO', isVisible: true, colors: defaultColors(officialImages.iphonePro), storages: defaultStorages },
@@ -96,13 +122,23 @@ function AdminNumber({ label, value, onChange }: { label: string; value: number 
 function Benefit({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) { return <article>{icon}<h3>{title}</h3><p>{text}</p></article> }
 function kakaoHref(model: string) { if (!kakaoChannelUrl) return '#consult'; const sep = kakaoChannelUrl.includes('?') ? '&' : '?'; return `${kakaoChannelUrl}${sep}text=${encodeURIComponent(`${model} 상담하고 싶어요`)}` }
 function ProductModal({ phone, onClose }: { phone: Phone; onClose: () => void }) {
-  const [colorIndex, setColorIndex] = useState(0), [storageIndex, setStorageIndex] = useState(0)
+  const defaultCarrier = normalizeCarrier(phone.carrier)
+  const [colorIndex, setColorIndex] = useState(0), [storageIndex, setStorageIndex] = useState(0), [targetCarrier, setTargetCarrier] = useState(defaultCarrier)
+  const plans = carrierPlans.filter((p) => p.carrier === targetCarrier)
+  const [planName, setPlanName] = useState((plans[0] || carrierPlans[0]).name)
+  const activePlans = carrierPlans.filter((p) => p.carrier === targetCarrier)
+  const plan = activePlans.find((p) => p.name === planName) || activePlans[0] || carrierPlans[0]
   const color = phone.colors[colorIndex] || phone.colors[0]
   const storage = phone.storages[storageIndex] || phone.storages[0]
-  const salePrice = storage?.price ?? phone.price
-  const support = storage?.support ?? phone.support
-  const deviceMonthly = salePrice ? Math.max(0, Math.round(salePrice / 24)) : 0
-  return <div className="modal-backdrop" onClick={onClose}><section className="detail-modal phonesawa-like" onClick={(e) => e.stopPropagation()}><button className="close" onClick={onClose}><X/></button><div className="detail-left"><div className="detail-phone-title"><h2>{phone.name}</h2><p>{storage?.label || ''} · {phone.subtitle}</p></div><div className="modal-media"><img src={color?.image || phone.image} alt={`${phone.name} ${color?.name || ''}`}/></div><div className="bill-card"><span>월 청구 금액</span><strong>{money(phone.monthly + deviceMonthly)}</strong><small>└ 휴대폰 단말기 {money(deviceMonthly)}<br/>└ 통신 요금 {money(phone.monthly)}</small></div><div className="cost-grid"><div><b>휴대폰 할부금</b><strong>{money(deviceMonthly)}</strong><small>출고가 {money(salePrice)}<br/>공통지원금 {money(support)}</small></div><div><b>통신요금</b><strong>{money(phone.monthly)}</strong><small>기본료 {money(phone.monthly)}</small></div></div></div><div className="detail-right"><div className="top-price"><span>월</span><strong>{money(phone.monthly + deviceMonthly)}</strong></div><div className="option-block"><h3>색상</h3><div className="color-choice-row">{phone.colors.map((c, i) => <button key={`${c.name}-${i}`} className={i === colorIndex ? 'active' : ''} onClick={() => setColorIndex(i)}><i style={{ background: c.hex }} />{c.name}</button>)}</div></div><div className="option-block"><h3>용량</h3><div className="storage-choice-row">{phone.storages.map((s, i) => <button key={`${s.label}-${i}`} className={i === storageIndex ? 'active' : ''} onClick={() => setStorageIndex(i)}>{s.label}</button>)}</div><div className="support-line"><span>출고가 : {money(salePrice)}</span><span>공통지원금 : {money(support)}</span></div></div><div className="carrier-box"><div><b>현재 통신사</b><select defaultValue="KT"><option>KT</option><option>SKT</option><option>LGU+</option><option>알뜰폰</option></select></div><div><b>가입 예정 통신사</b><select defaultValue={phone.carrier === 'SK' ? 'SKT' : phone.carrier}><option>SKT</option><option>KT</option><option>LGU+</option><option>알뜰폰</option></select></div></div><div className="plan-row"><b>요금제</b><strong>0 청년 79</strong><button>변경</button><small>300GB · 집/이동전화 무제한 / 기본제공</small></div><div className="modal-actions"><a className="kakao-talk" href={kakaoHref(phone.name)}><MessageCircle size={19}/> 카카오톡 상담하기</a><a className="outline" href="#consult" onClick={onClose}>신청하기</a></div></div></section></div>
+  const devicePrice = storage?.price ?? phone.price ?? 0
+  const support = storage?.support ?? phone.support ?? 0
+  const principal = Math.max(0, devicePrice - support)
+  const installment = installmentPayment(principal)
+  const monthlyBill = installment.monthly + plan.fee
+  const thisMonthDevice = currentMonthProrated(installment.monthly)
+  const thisMonthPlan = currentMonthProrated(plan.fee)
+  function changeCarrier(next: string) { const nextPlans = carrierPlans.filter((p) => p.carrier === next); setTargetCarrier(next); setPlanName((nextPlans[0] || carrierPlans[0]).name) }
+  return <div className="modal-backdrop" onClick={onClose}><section className="detail-modal phonesawa-like" onClick={(e) => e.stopPropagation()}><button className="close" onClick={onClose}><X/></button><div className="detail-left"><div className="detail-phone-title"><h2>{phone.name}</h2><p>{storage?.label || ''} · {phone.subtitle}</p></div><div className="modal-media"><img src={color?.image || phone.image} alt={`${phone.name} ${color?.name || ''}`}/></div><div className="bill-card"><span>월별 청구금액</span><strong>{money(monthlyBill)}</strong><small>└ 단말 할부금 {money(installment.monthly)}<br/>└ 요금제 {money(plan.fee)}</small></div><div className="cost-grid"><div><b>휴대폰 할부금</b><strong>{money(installment.monthly)}</strong><small>할부원금 {money(principal)}<br/>할부수수료 {money(installment.interest)}<br/>원리금균등 연 5.9% · 24개월</small></div><div><b>당월 예상금액</b><strong>{money(thisMonthDevice + thisMonthPlan)}</strong><small>단말 {money(thisMonthDevice)} + 요금 {money(thisMonthPlan)}<br/>오늘 기준 남은 일수 일할 계산</small></div></div></div><div className="detail-right"><div className="top-price"><span>월</span><strong>{money(monthlyBill)}</strong></div><div className="option-block"><h3>색상</h3><div className="color-choice-row">{phone.colors.map((c, i) => <button key={`${c.name}-${i}`} className={i === colorIndex ? 'active' : ''} onClick={() => setColorIndex(i)}><i style={{ background: c.hex }} />{c.name}</button>)}</div></div><div className="option-block"><h3>용량</h3><div className="storage-choice-row">{phone.storages.map((s, i) => <button key={`${s.label}-${i}`} className={i === storageIndex ? 'active' : ''} onClick={() => setStorageIndex(i)}>{s.label}</button>)}</div><div className="support-line"><span>출고가 : {money(devicePrice)}</span><span>공통지원금 : {money(support)}</span></div></div><div className="carrier-box"><div><b>현재 통신사</b><select defaultValue="KT"><option>KT</option><option>SKT</option><option>LGU+</option><option>알뜰폰</option></select></div><div><b>가입 예정 통신사</b><select value={targetCarrier} onChange={(e) => changeCarrier(e.target.value)}><option>SKT</option><option>KT</option><option>LGU+</option></select></div></div><div className="plan-row plan-picker"><b>요금제</b><select value={plan.name} onChange={(e) => setPlanName(e.target.value)}>{activePlans.map((p) => <option key={p.name}>{p.name}</option>)}</select><strong>{money(plan.fee)}</strong><small>{plan.data} · {plan.voice}</small></div><div className="benefit-box"><b>요금제 혜택</b>{plan.benefits.map((benefit) => <span key={benefit}>□ {benefit}</span>)}</div><div className="modal-actions"><a className="kakao-talk" href={kakaoHref(phone.name)}><MessageCircle size={19}/> 카카오톡 상담하기</a><a className="outline" href="#consult" onClick={onClose}>신청하기</a></div></div></section></div>
 }
 function ConsultForm({ selected }: { selected: string }) { const [name, setName] = useState(''), [phone, setPhone] = useState(''), [model, setModel] = useState(selected), [joinType, setJoinType] = useState<JoinType>('번호이동'), [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle'), [message, setMessage] = useState(''); React.useEffect(() => setModel(selected), [selected]); async function submit(e: React.FormEvent<HTMLFormElement>) { e.preventDefault(); setStatus('sending'); setMessage(''); if (!supabase) { setStatus('error'); setMessage('상담 저장 설정이 아직 연결되지 않았습니다.'); return } const { error } = await supabase.from('consult_requests').insert({ name, phone, desired_model: model || null, join_type: joinType, source: 'linkbus.kr', status: 'new' }); if (error) { setStatus('error'); setMessage('저장 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); return } setStatus('success'); setMessage('상담 신청이 접수되었습니다. 확인 후 연락드릴게요.'); setName(''); setPhone(''); setModel(''); setJoinType('번호이동') } return <form className="consult-form" onSubmit={submit}><div className="form-title"><Store/><div><p>무료 상담 신청</p><h2>현재 조건과 재고를 확인해드려요</h2></div></div><label>이름<input value={name} onChange={(e) => setName(e.target.value)} placeholder="홍길동" required /></label><label>연락처<input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="010-0000-0000" required /></label><label>희망 모델<input value={model} onChange={(e) => setModel(e.target.value)} placeholder="예: 아이폰 17 프로" /></label><label>가입유형<select value={joinType} onChange={(e) => setJoinType(e.target.value as JoinType)}><option>번호이동</option><option>기기변경</option><option>신규가입</option></select></label><label className="agree"><input type="checkbox" required /> 개인정보 수집·이용에 동의합니다.</label>{message && <p className={`form-message ${status}`}>{message}</p>}<button className="submit" type="submit" disabled={status === 'sending'}>{status === 'sending' ? '접수 중...' : '상담 신청하기'}</button></form> }
 createRoot(document.getElementById('root')!).render(<App />)
