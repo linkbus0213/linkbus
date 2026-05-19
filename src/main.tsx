@@ -149,8 +149,8 @@ function ImageUploader({ image, uploading, onUpload }: { image: string; uploadin
 function ColorEditor({ colors, uploading, onChange, onUpload }: { colors: ColorOption[]; uploading: boolean; onChange: (v: ColorOption[]) => void; onUpload: (file: File, index: number) => void }) { return <div className="option-editor"><div className="option-title"><b>모델 색상</b><button type="button" onClick={() => onChange([...colors, { name: '새 색상', hex: '#dddddd', image: colors[0]?.image || officialImages.iphone }])}>색상 추가</button></div>{colors.map((c, i) => <div className="color-edit-row" key={i}><input value={c.name} onChange={(e) => onChange(colors.map((x, n) => n === i ? { ...x, name: e.target.value } : x))} placeholder="색상명"/><input type="color" value={c.hex || '#dddddd'} onChange={(e) => onChange(colors.map((x, n) => n === i ? { ...x, hex: e.target.value } : x))}/><label className="mini-upload">이미지<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" disabled={uploading} onChange={(e) => { const file = e.target.files?.[0]; if (file) onUpload(file, i) }} /></label>{c.image && <img src={c.image} alt=""/>}<button type="button" onClick={() => onChange(colors.filter((_, n) => n !== i))}>삭제</button></div>)}</div> }
 function StorageEditor({ storages, onChange }: { storages: StorageOption[]; onChange: (v: StorageOption[]) => void }) {
   const setStorage = (index: number, patch: Partial<StorageOption>) => onChange(storages.map((x, n) => n === index ? { ...x, ...patch } : x))
-  const addPreset = (label: string) => {
-    if (storages.some((s) => s.label === label)) return
+  const togglePreset = (label: string) => {
+    if (storages.some((s) => s.label === label)) { onChange(storages.filter((s) => s.label !== label)); return }
     onChange([...storages, { label, isVisible: true, supportByCarrier: {}, rebateByCarrierJoin: {} }])
   }
   const setCarrierMoney = (index: number, field: 'supportByCarrier' | 'rebateByCarrier', carrier: CarrierKey, value: number | null) => {
@@ -162,7 +162,7 @@ function StorageEditor({ storages, onChange }: { storages: StorageOption[]; onCh
     const carrierRows = all[carrier] || {}
     setStorage(index, { rebateByCarrierJoin: { ...all, [carrier]: { ...carrierRows, [joinType]: value } } })
   }
-  return <div className="option-editor"><div className="option-title storage-title"><b>저장공간 · 통신사별 지원금/가입유형별 리베이트</b><div className="storage-presets">{storagePresets.map((label) => <button key={label} type="button" disabled={storages.some((s) => s.label === label)} onClick={() => addPreset(label)}>{label}</button>)}</div></div><p className="formula-note">지원되는 용량만 추가하거나 고객노출을 켜두면 고객 웹페이지에 표시됩니다.</p>{storages.map((s, i) => {
+  return <div className="option-editor"><div className="option-title storage-title"><b>저장공간 · 통신사별 지원금/가입유형별 리베이트</b><div className="storage-presets">{storagePresets.map((label) => { const active = storages.some((s) => s.label === label); return <button key={label} type="button" className={active ? 'active' : ''} onClick={() => togglePreset(label)}>{label}</button> })}</div></div><p className="formula-note">저장공간 버튼을 누르면 상세 입력창이 열리고, 다시 누르면 사라집니다. 고객노출이 켜진 용량만 고객 웹페이지에 표시됩니다.</p>{storages.map((s, i) => {
     const sampleCarrier = 'SKT' as CarrierKey
     const sampleJoin = '번호이동' as JoinType
     const samplePrincipal = customerPrincipal(s.price, carrierValue(s.supportByCarrier, sampleCarrier, s.support), rebateValue(s, sampleCarrier, sampleJoin, s.rebate))
