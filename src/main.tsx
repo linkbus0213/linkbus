@@ -783,16 +783,27 @@ function Benefit({ icon, title, text }: { icon: React.ReactNode; title: string; 
 function kakaoHref(model: string) { if (!kakaoChannelUrl) return '/#consult'; const sep = kakaoChannelUrl.includes('?') ? '&' : '?'; return `${kakaoChannelUrl}${sep}text=${encodeURIComponent(`${model} 상담하고 싶어요`)}` }
 
 function CautionText({ text }: { text: string }) {
-  const lines = text.split('\n')
-  return <div className="caution-text">{lines.map((line, index) => {
-    const trimmed = line.trim()
-    if (!trimmed) return <div className="caution-gap" key={index} />
-    if (index === 0) return <h3 key={index}>{trimmed}</h3>
-    if (index === 2) return <p className="caution-lead" key={index}>{trimmed}</p>
-    if (/^\[.+\]$/.test(trimmed)) return <h4 key={index}>{trimmed.replace(/^\[|\]$/g, '')}</h4>
-    if (/^\d+\./.test(trimmed)) return <p className="caution-number" key={index}>{trimmed}</p>
-    if (trimmed.startsWith('-')) return <p className="caution-sub" key={index}>{trimmed}</p>
-    return <p key={index}>{trimmed}</p>
+  const sectionHeads = new Set(['통신사별/가입유형별 진행 불가인 경우', '위약금 및 잔여할부금 확인 및 가입 불가 요금제', '통신사 이동 :', '신규가입 & 기기변경 :', '부가서비스 및 보험 가입 안내', '유심 안내', '결합 및 복지할인'])
+  const lines = text.split('\n').map((line) => line.trim()).filter(Boolean)
+  const blocks: Array<{ type: 'title' | 'lead' | 'section' | 'subhead' | 'card'; lines: string[] }> = []
+  let current: { type: 'card'; lines: string[] } | null = null
+  const flush = () => { if (current) { blocks.push(current); current = null } }
+  lines.forEach((line, index) => {
+    if (index === 0) { flush(); blocks.push({ type: 'title', lines: [line] }); return }
+    if (line === '휴대폰 구매 시 주의사항 및 필독사항') { flush(); blocks.push({ type: 'lead', lines: [line] }); return }
+    if (/^\[.+\]$/.test(line)) { flush(); blocks.push({ type: 'section', lines: [line.replace(/^\[|\]$/g, '')] }); return }
+    if (sectionHeads.has(line)) { flush(); blocks.push({ type: 'subhead', lines: [line] }); return }
+    if (/^\d+\./.test(line)) { flush(); current = { type: 'card', lines: [line] }; return }
+    if (!current) current = { type: 'card', lines: [] }
+    current.lines.push(line)
+  })
+  flush()
+  return <div className="caution-text">{blocks.map((block, index) => {
+    if (block.type === 'title') return <h3 key={index}>{block.lines[0]}</h3>
+    if (block.type === 'lead') return <p className="caution-lead" key={index}>{block.lines[0]}</p>
+    if (block.type === 'section') return <h4 key={index}>{block.lines[0]}</h4>
+    if (block.type === 'subhead') return <h5 key={index}>{block.lines[0]}</h5>
+    return <div className="caution-number" key={index}>{block.lines.map((line, lineIndex) => <p className={line.startsWith('-') || line.startsWith('(') ? 'caution-sub' : ''} key={lineIndex}>{line}</p>)}</div>
   })}</div>
 }
 function ProductDetail({ phone }: { phone: Phone }) {
