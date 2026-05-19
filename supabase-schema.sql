@@ -17,3 +17,57 @@ create policy "Anyone can submit consult requests"
   for insert
   to anon
   with check (true);
+
+drop policy if exists "Admin can read consult requests" on public.consult_requests;
+create policy "Admin can read consult requests"
+  on public.consult_requests
+  for select
+  to authenticated
+  using ((auth.jwt() ->> 'email') = 'linkbus0213@gmail.com');
+
+create table if not exists public.sale_products (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  brand text not null check (brand in ('애플', '삼성', '기타')),
+  series text not null,
+  carrier text not null check (carrier in ('SK', 'KT', 'LG', '알뜰폰')),
+  join_type text not null check (join_type in ('번호이동', '기기변경', '신규가입')),
+  name text not null,
+  subtitle text,
+  image_url text,
+  sale_price integer,
+  rebate integer,
+  monthly_fee integer,
+  support_amount integer,
+  badge text,
+  tag text,
+  is_visible boolean not null default true,
+  sort_order integer default 100
+);
+
+alter table public.sale_products enable row level security;
+
+drop policy if exists "Visible products are public" on public.sale_products;
+create policy "Visible products are public"
+  on public.sale_products
+  for select
+  to anon, authenticated
+  using (is_visible = true or (auth.jwt() ->> 'email') = 'linkbus0213@gmail.com');
+
+drop policy if exists "Admin can manage products" on public.sale_products;
+create policy "Admin can manage products"
+  on public.sale_products
+  for all
+  to authenticated
+  using ((auth.jwt() ->> 'email') = 'linkbus0213@gmail.com')
+  with check ((auth.jwt() ->> 'email') = 'linkbus0213@gmail.com');
+
+insert into public.sale_products (brand, series, carrier, join_type, name, subtitle, image_url, sale_price, rebate, monthly_fee, support_amount, badge, tag, sort_order)
+select * from (values
+  ('애플','iPhone 17 시리즈','SK','번호이동','아이폰 17e','128GB · 빠른 상담 가능','https://www.apple.com/v/iphone-17/f/images/meta/iphone-17_overview__cg0rlzmbhl7m_og.png?202604301049',190000,0,69000,620000,'인기','APPLE',10),
+  ('애플','iPhone 17 시리즈','KT','기기변경','아이폰 17 프로맥스','256GB · 색상 상담','https://www.apple.com/v/iphone-17-pro/f/images/meta/iphone-17-pro_overview__eumhhclcpuaa_og.png?202604301049',740000,0,99000,760000,'최신','PRO',20),
+  ('애플','iPhone 17 시리즈','LG','번호이동','아이폰 17 프로','256GB · 재고 확인','https://www.apple.com/v/iphone-17-pro/f/images/meta/iphone-17-pro_overview__eumhhclcpuaa_og.png?202604301049',620000,0,95000,680000,'추천','HOT',30),
+  ('삼성','Galaxy S26 시리즈','LG','번호이동','갤럭시 S26 울트라','256GB · 울트라 성능','https://images.samsung.com/kdp/st/1/17875ef3-e132-4a7e-abfb-2622dd6c8a9c.jpg',530000,0,95000,880000,'급상승','SAMSUNG',40)
+) as seed(brand, series, carrier, join_type, name, subtitle, image_url, sale_price, rebate, monthly_fee, support_amount, badge, tag, sort_order)
+where not exists (select 1 from public.sale_products);
