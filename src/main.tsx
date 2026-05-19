@@ -98,6 +98,9 @@ function visibleStorages(phone: Phone) { const list = phone.storages.filter((s) 
 function rowToPhone(row: ProductRow): Phone { const image = row.image_url || officialImages.iphone; return { id: row.id, brand: row.brand, series: row.series, carrier: row.carrier, joinType: row.join_type, name: row.name, subtitle: row.subtitle || '', image, price: row.sale_price, rebate: row.rebate, monthly: row.monthly_fee || 0, support: row.support_amount || 0, badge: row.badge || '추천', tag: row.tag || row.brand, isVisible: row.is_visible, colors: cleanColors(row.color_options, image), storages: cleanStorages(row.storage_options) } }
 function phoneToRow(phone: Phone) { return { brand: phone.brand, series: phone.series, carrier: phone.carrier, join_type: phone.joinType, name: phone.name, subtitle: phone.subtitle, image_url: phone.image, sale_price: phone.price, rebate: phone.rebate, monthly_fee: phone.monthly, support_amount: phone.support, badge: phone.badge, tag: phone.tag, is_visible: phone.isVisible ?? true, color_options: phone.colors, storage_options: phone.storages } }
 
+
+function IctCertBadge() { return <a className="ict-cert-badge" href="https://ictmarket.or.kr:8443/precon/pop_CertIcon.do?PRECON_REQ_ID=PRE0000191674" target="_blank" rel="noreferrer"><img src="https://ictmarket.or.kr:8443/getCertIcon.do?cert_icon=KP25022507346Q002" alt="ICTMARKET 사전승낙 인증마크"/></a> }
+
 function App() { if (location.pathname.startsWith('/admin')) return <AdminApp />; if (location.pathname.startsWith('/product/')) return <ProductPage />; return <Storefront /> }
 
 function Storefront() {
@@ -117,7 +120,7 @@ function Storefront() {
       <section className="consult-cta"><div><p>최저가 보장 · 숨은 조건 없음</p><h3>어떤 폰이 나에게 맞을지 모르겠다면?</h3></div><div><a href="#popular">기기 비교하기</a><a className="kakao" href="#consult"><MessageCircle size={18}/> 무료 상담 신청</a></div></section>
       <section className="content-grid"><article className="curation"><div className="block-head"><h2>놓치면 아까운 꿀팁! 링크버스 큐레이션</h2><a href="#consult">더보기 <ChevronRight size={16}/></a></div><div className="tip-list">{tips.map((tip) => <a key={tip} href="#consult"><span>핫이슈</span>{tip}<ChevronRight size={16}/></a>)}</div></article><article className="phone-tube"><h2>휴대폰의 모든 것을 한눈에 보다. 링크튜브</h2><div className="video-row">{['갤럭시 S26 실사용 후기', '통신사 혜택 비교', '아이폰 17 구매 가이드'].map((title, i) => <div className="video-card" key={title}><div className={`thumb t${i}`}><PlayCircle/></div><b>{title}</b></div>)}</div></article></section>
       <section id="consult" className="consult-area"><div className="benefits"><Benefit icon={<Star/>} title="최저가 보장" text="전 통신사 조건을 비교해 합리적인 가격을 안내합니다." /><Benefit icon={<ShieldCheck/>} title="안전한 구매" text="상담 후 조건을 확정하고 신청 절차를 안내합니다." /><Benefit icon={<Headphones/>} title="전문 상담" text="기기·요금제·가입유형을 맞춤 추천합니다." /></div><ConsultForm selected="" /></section>
-    </main><footer className="footer"><div className="footer-call"><h4>구매 문의 관련 상담</h4><strong>카카오톡 상담 / 전화 상담 준비중</strong><p>평일 10:00 ~ 18:00 · 토요일 10:00 ~ 15:00</p></div><div><b>LINKBUS</b><p>상호/사업자 정보/통신판매업 신고번호는 실제 사업자 가입 후 입력합니다.</p></div></footer></>
+    </main><footer className="footer"><div className="footer-call"><h4>구매 문의 관련 상담</h4><strong>카카오톡 상담 / 전화 상담 준비중</strong><p>평일 10:00 ~ 18:00 · 토요일 10:00 ~ 15:00</p></div><div><b>LINKBUS</b><p>상호/사업자 정보/통신판매업 신고번호는 실제 사업자 가입 후 입력합니다.</p><IctCertBadge /></div></footer></>
 }
 
 function ProductPage() {
