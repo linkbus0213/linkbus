@@ -68,8 +68,12 @@ const appleBasicDetailImages = [
   'https://www.apple.com/kr/iphone-17-pro/images/overview/shared-features/ai-gallery/visual_intelligence__dzuk4k0u50cy_large.jpg',
 ]
 const samsungUltraDetailImages = [
-  'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-highlights-refined-design-start.jpg',
-  'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-privacy-display-1-start-v2.jpg',
+  'https://images.samsung.com/kdp/static/pd/smartphone/galaxy-s26-ultra/SM-S948N_web_00_KV_no-cta.jpg',
+  'https://images.samsung.com/kdp/cms_task/C20260207010017/57182/9d47bf1b-ca83-4cc1-b301-9414b3d4ce7e.jpg?$ORIGIN_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20260227000142/57618/72c06c9c-e5af-4533-8cbc-c485ad8e8286.jpg?$ORIGIN_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20260227000142/57618/5923627d-a31a-4de5-aa0f-a91fe89c7188.jpg?$ORIGIN_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20260226000040/57516/5cfd7be5-2425-4a51-ad5c-6db398b339ed.jpg?$ORIGIN_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20260316000077/58382/cf51995a-5c84-4417-88cc-fb3f47643cca.jpg?$ORIGIN_JPG$',
   'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-ap-a-start.jpg',
   'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-vapor-chamber-a-start-v3.jpg',
   'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-nightography-start.jpg',
@@ -78,6 +82,7 @@ const samsungUltraDetailImages = [
   'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-now-carousel-now-nudge-start.jpg',
   'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-now-carousel-now-brief-a-start.jpg',
   'https://images.samsung.com/kdp/static/mkt/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-bixby-start.jpg',
+  'https://images.samsung.com/kdp/static/pd/smartphone/galaxy-s26-ultra/SM-S948N_web_27_left_v2.jpg?$FB_TYPE_B_JPG$',
 ]
 const samsungDetailImages = [
   'https://images.samsung.com/sec/smartphones/galaxy-s26/images/galaxy-s26-features-design-intro-start.jpg',
