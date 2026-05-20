@@ -185,6 +185,28 @@ const samsungS25FeFeatureImages = [
   'https://images.samsung.com/kdp/static/pd/smartphone/SM-S731N_mo_25_2.jpg?$FB_TYPE_L_MO_JPG$',
   'https://images.samsung.com/kdp/static/pd/smartphone/SM-S731N_mo_25_3.jpg?$FB_TYPE_L_MO_JPG$',
 ]
+const samsungA36FeatureImages = [
+  'https://images.samsung.com/kdp/cms_task/C20250529000080/27478/c3555c24-9c05-492f-9fef-fa28b1669407.jpg?$ORIGIN_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000082/27480/374956f3-4dbd-420a-9179-fa5f6ee215d1.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000084/27482/3db17394-65d2-4dd7-a716-065e78f8d827.jpg?$ORIGIN_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000084/27482/644a500e-56f6-4472-82eb-37f1f262f90e.jpg?$ORIGIN_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000084/27482/39aac6d8-f647-41f8-94df-f0ac382f8a0e.jpg?$ORIGIN_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000086/27484/d150c067-7d51-4df7-b143-6237474a4b63.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000087/27485/6cb08129-51ff-4ae9-9809-e70f5d4cbf76.jpg?$FB_TYPE_B_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000089/27487/4b5f88f9-73f8-4064-b8e8-f5671d3b6a79.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250610000211/27609/3dd01dc2-d34b-46e7-9776-97e3c95995b4.jpg?$FB_TYPE_B_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250610000212/27610/25a78929-6eea-40c7-9800-96ce066b40fc.jpg?$FB_TYPE_B_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000093/27491/7b9e693b-5c9f-4068-80b2-b99b1a84973b.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000094/27492/15372546-6557-4503-8f99-b8a2ca8a15c3.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000095/27493/6878d091-3bda-4b3c-8c44-1c9671669292.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000096/27494/a75b5b72-72c0-431f-8369-3263a957c797.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000097/27495/61ee248d-b093-4866-b647-a560f8ff674c.jpg?$FB_TYPE_B_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000098/27496/1d85d749-5dff-4f17-a282-640c322cf48e.jpg?$ORIGIN_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20250529000099/27497/22387397-d145-4691-85b5-3f425a5c0496.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/static/pd/smartphone/SM-A366N_mo_12_1.jpg',
+  'https://images.samsung.com/kdp/static/pd/smartphone/SM-A366N_mo_12_2.jpg',
+  'https://images.samsung.com/kdp/static/pd/smartphone/SM-A366N_mo_12_3.jpg',
+]
 const defaultColors = (image: string): ColorOption[] => [{ name: '블랙', hex: '#1f2329', image }, { name: '화이트', hex: '#f2f2ee', image }, { name: '핑크', hex: '#f6d8dd', image }]
 const storagePresets = ['128G', '256G', '512G', '1TB', '2TB']
 const defaultStorages: StorageOption[] = [{ label: '256G', isVisible: true }]
@@ -1074,13 +1096,14 @@ function ProductOfficialDetails({ phone }: { phone: Phone }) {
   const isFold7 = /Z\s*폴드\s*7|폴드\s*7|Fold\s*7/i.test(phone.name)
   const isFlip7 = /Z\s*플립\s*7|플립\s*7|Flip\s*7/i.test(phone.name)
   const isA17 = /A17|에이17/i.test(phone.name)
+  const isA36 = /A36|에이36/i.test(phone.name)
   const isS25Fe = /S25\s*FE|S25FE|에스25\s*FE/i.test(phone.name)
-  const images = isSamsung ? (isS25Fe ? samsungS25FeFeatureImages : isA17 ? samsungA17FeatureImages : isFlip7 ? samsungZFlip7FeatureImages : isFold7 ? samsungZFold7FeatureImages : isUltra ? samsungUltraDetailImages : isPlus ? samsungS26PlusFeatureImages : isS26 ? samsungS26FeatureImages : samsungDetailImages) : (/프로|Pro/i.test(phone.name) ? appleDetailImages : appleBasicDetailImages)
-  const source = (isS26 || isPlus || isUltra || isFold7 || isFlip7 || isA17 || isS25Fe) ? 'Samsung 공식 홈페이지 특장점' : isSamsung ? 'Samsung 공식 홈페이지' : 'Apple 공식 홈페이지'
+  const images = isSamsung ? (isA36 ? samsungA36FeatureImages : isS25Fe ? samsungS25FeFeatureImages : isA17 ? samsungA17FeatureImages : isFlip7 ? samsungZFlip7FeatureImages : isFold7 ? samsungZFold7FeatureImages : isUltra ? samsungUltraDetailImages : isPlus ? samsungS26PlusFeatureImages : isS26 ? samsungS26FeatureImages : samsungDetailImages) : (/프로|Pro/i.test(phone.name) ? appleDetailImages : appleBasicDetailImages)
+  const source = (isS26 || isPlus || isUltra || isFold7 || isFlip7 || isA17 || isA36 || isS25Fe) ? 'Samsung 공식 홈페이지 특장점' : isSamsung ? 'Samsung 공식 홈페이지' : 'Apple 공식 홈페이지'
   const features = isSamsung ? ['세련된 디자인과 대화면 디스플레이', 'AI 기반 카메라/성능 경험', '일상 사용에 맞춘 배터리와 내구성'] : ['정교한 디자인과 선명한 디스플레이', '강력한 칩셋과 카메라 경험', 'iOS와 Apple Intelligence 기반 기능']
   const [detailExpanded, setDetailExpanded] = useState(false)
-  const isLongSamsungDetail = isS26 || isPlus || isUltra || isFold7 || isFlip7 || isA17 || isS25Fe
-  const specImage = isS25Fe ? '/images/samsung-s25-fe-spec-full.png' : isA17 ? '/images/samsung-a17-spec-full.png' : isFlip7 ? '/images/samsung-z-flip7-spec-full.png' : isFold7 ? '/images/samsung-z-fold7-spec-full.png' : isUltra ? '/images/samsung-s26-ultra-spec-full.png' : isPlus ? '/images/samsung-s26-plus-spec-full.png' : '/images/samsung-s26-spec-full.png'
+  const isLongSamsungDetail = isS26 || isPlus || isUltra || isFold7 || isFlip7 || isA17 || isA36 || isS25Fe
+  const specImage = isA36 ? '/images/samsung-a36-spec-full.png' : isS25Fe ? '/images/samsung-s25-fe-spec-full.png' : isA17 ? '/images/samsung-a17-spec-full.png' : isFlip7 ? '/images/samsung-z-flip7-spec-full.png' : isFold7 ? '/images/samsung-z-fold7-spec-full.png' : isUltra ? '/images/samsung-s26-ultra-spec-full.png' : isPlus ? '/images/samsung-s26-plus-spec-full.png' : '/images/samsung-s26-spec-full.png'
   const visibleImages = isLongSamsungDetail && !detailExpanded ? images.slice(0, 6) : images
   if (isLongSamsungDetail) return <section className={`product-official-detail tdirect-detail ${detailExpanded ? 'expanded' : 'collapsed'}`}><div className="board-title"><div><h3>상품 상세정보</h3></div><strong>{detailExpanded ? `${images.length}장 전체` : '요약보기'}</strong></div><div className="official-detail-long-list">{visibleImages.map((src, index) => <img key={src} src={src} alt={`${phone.name} 삼성전자 특장점 이미지 ${index + 1}`} loading="lazy" />)}{detailExpanded && <img className="s26-spec-full-image" src={specImage} alt={`${phone.name} 삼성전자 공식 스펙 및 상품 기본정보`} loading="lazy" />}</div><div className="detail-more-box"><button type="button" onClick={() => setDetailExpanded(!detailExpanded)}>{detailExpanded ? '상세정보 접기' : '상세정보 더보기'}</button></div><p className="official-detail-note">상세 이미지는 삼성전자 공식 홈페이지 특장점 기준이며, 색상·용량·구성품은 선택한 모델 및 판매 조건에 따라 달라질 수 있습니다.</p></section>
   return <section className="product-official-detail"><div className="board-title"><div><h3>상품 상세정보</h3><p>{source}의 제품 이미지를 바탕으로 주요 특징을 확인해보세요.</p></div><strong>{phone.brand}</strong></div><div className="official-detail-hero"><img src={images[0]} alt={`${phone.name} 공식 제품 이미지`} loading="lazy" /></div><div className="official-detail-grid">{images.slice(1).map((src, index) => <article key={src}><img src={src} alt={`${phone.name} 상세 이미지 ${index + 1}`} loading="lazy" /><b>{features[index + 1] || features[index]}</b></article>)}</div><ul className="official-detail-points">{features.map((item) => <li key={item}>✓ {item}</li>)}</ul><p className="official-detail-note">상세 이미지와 기능 설명은 제조사 공식 홈페이지 기준이며, 색상·용량·구성품은 선택한 모델 및 제조사 정책에 따라 달라질 수 있습니다.</p></section>
