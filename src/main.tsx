@@ -765,7 +765,7 @@ function ProductPage() {
       setLoading(false)
     })
   }, [productId])
-  return <><HeaderNav simple /><main className="product-detail-page">{loading ? <p className="empty">상품 정보를 불러오는 중입니다.</p> : phone ? <ProductDetail phone={phone} /> : <section className="popular-section"><p className="empty">상품을 찾을 수 없습니다.</p><a className="outline page-back" href="/">목록으로 돌아가기</a></section>}</main><SiteFooter /></>
+  return <><MainHeader /><main className="product-detail-page">{loading ? <p className="empty">상품 정보를 불러오는 중입니다.</p> : phone ? <ProductDetail phone={phone} /> : <section className="popular-section"><p className="empty">상품을 찾을 수 없습니다.</p><a className="outline page-back" href="/">목록으로 돌아가기</a></section>}</main><SiteFooter /></>
 }
 
 function AdminApp() { const [sessionEmail, setSessionEmail] = useState<string | null>(null); React.useEffect(() => { supabase?.auth.getUser().then(({ data }) => setSessionEmail(data.user?.email || null)) }, []); if (!supabase) return <AdminShell><p>Supabase 설정이 필요합니다.</p></AdminShell>; if (sessionEmail !== ADMIN_EMAIL) return <AdminLogin onLogin={setSessionEmail} />; return <AdminPanel onLogout={async () => { await supabase.auth.signOut(); setSessionEmail(null) }} /> }
