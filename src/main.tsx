@@ -966,24 +966,8 @@ function ColorEditor({ colors, uploading, onChange, onUpload }: { colors: ColorO
 function StorageEditor({ storages, onChange }: { storages: StorageOption[]; onChange: (v: StorageOption[]) => void }) {
   const setStorage = (index: number, patch: Partial<StorageOption>) => onChange(storages.map((x, n) => n === index ? { ...x, ...patch } : x))
   const togglePreset = (label: string) => {
-    if (storages.some((s) => s.label === label)) { onChange(storages.filter((s) => s.label !== label)); return }
+    if (storages.some((storage) => storage.label === label)) { onChange(storages.filter((storage) => storage.label !== label)); return }
     onChange([...storages, { label, isVisible: true, saleVisibleByCarrier: {}, supportByCarrier: {}, rebateByCarrierJoin: {} }])
-  }
-  const setCarrierMoney = (index: number, field: 'supportByCarrier' | 'rebateByCarrier', carrier: CarrierKey, value: number | null) => {
-    const current = storages[index]?.[field] || {}
-    setStorage(index, { [field]: { ...current, [carrier]: value } } as Partial<StorageOption>)
-  }
-  const setJoinRebate = (index: number, carrier: CarrierKey, joinType: JoinType, value: number | null) => {
-    const all = storages[index]?.rebateByCarrierJoin || {}
-    const carrierRows = all[carrier] || {}
-    setStorage(index, { rebateByCarrierJoin: { ...all, [carrier]: { ...carrierRows, [joinType]: value } } })
-  }
-  const setPlanVisible = (index: number, carrier: CarrierKey, planName: string, checked: boolean) => {
-    const all = storages[index]?.visiblePlansByCarrier || {}
-    const carrierPlanNames = carrierPlans.filter((p) => p.carrier === carrier).map((p) => p.name)
-    const current = all[carrier] || carrierPlanNames
-    const next = checked ? Array.from(new Set([...current, planName])) : current.filter((name) => name !== planName)
-    setStorage(index, { visiblePlansByCarrier: { ...all, [carrier]: next } })
   }
   const setSaleVisible = (index: number, carrier: CarrierKey, checked: boolean) => {
     const all = storages[index]?.saleVisibleByCarrier || {}
@@ -993,22 +977,11 @@ function StorageEditor({ storages, onChange }: { storages: StorageOption[]; onCh
     const all = storages[index]?.newJoinVisibleByCarrier || {}
     setStorage(index, { newJoinVisibleByCarrier: { ...all, [carrier]: checked } })
   }
-  const setPlanSupport = (index: number, carrier: CarrierKey, planName: string, value: number | null) => {
-    const all = storages[index]?.planSupportByCarrier || {}
-    const carrierRows = all[carrier] || {}
-    setStorage(index, { planSupportByCarrier: { ...all, [carrier]: { ...carrierRows, [planName]: value } } })
+  const setCarrierSupport = (index: number, carrier: CarrierKey, value: number | null) => {
+    const all = storages[index]?.supportByCarrier || {}
+    setStorage(index, { supportByCarrier: { ...all, [carrier]: value } })
   }
-  const setPlanJoinRebate = (index: number, carrier: CarrierKey, planName: string, joinType: JoinType, value: number | null) => {
-    const all = storages[index]?.planRebateByCarrier || {}
-    const carrierRows = all[carrier] || {}
-    const planRows = carrierRows[planName] || {}
-    setStorage(index, { planRebateByCarrier: { ...all, [carrier]: { ...carrierRows, [planName]: { ...planRows, [joinType]: value } } } })
-  }
-  return <div className="option-editor"><div className="option-title storage-title"><b>저장공간 · 공통지원금 · 요금제별 리베이트/노출</b><div className="storage-presets">{storagePresets.map((label) => { const active = storages.some((s) => s.label === label); return <button key={label} type="button" className={active ? 'active' : ''} onClick={() => togglePreset(label)}>{label}</button> })}</div></div><p className="formula-note">저장공간 버튼을 누르면 상세 입력창이 열리고, 다시 누르면 사라집니다. 고객노출이 켜진 용량만 고객 웹페이지에 표시됩니다.</p>{storages.map((s, i) => {
-    const sampleCarrier = 'SKT' as CarrierKey
-    const sampleJoin = '번호이동' as JoinType
-    const samplePrincipal = customerPrincipal(s.price, carrierValue(s.supportByCarrier, sampleCarrier, s.support), rebateValue(s, sampleCarrier, sampleJoin, s.rebate))
-    return <div className="storage-edit-card" key={i}><div className="storage-edit-row"><input value={s.label} onChange={(e) => setStorage(i, { label: e.target.value })} placeholder="256G"/><input type="number" value={s.price ?? ''} onChange={(e) => setStorage(i, { price: e.target.value === '' ? null : Number(e.target.value) })} placeholder="출고가"/><input type="number" value={s.support ?? ''} onChange={(e) => setStorage(i, { support: e.target.value === '' ? null : Number(e.target.value) })} placeholder="기본 공통지원금"/><input type="number" value={s.rebate ?? ''} onChange={(e) => setStorage(i, { rebate: e.target.value === '' ? null : Number(e.target.value) })} placeholder="기본 리베이트"/><label className="storage-visible"><input type="checkbox" checked={s.isVisible !== false} onChange={(e) => setStorage(i, { isVisible: e.target.checked })}/> 고객노출</label><button type="button" onClick={() => onChange(storages.filter((_, n) => n !== i))}>삭제</button></div><div className="carrier-support-grid join-rebate-grid">{carrierKeys.map((carrier) => { const plans = carrierPlans.filter((p) => p.carrier === carrier); const visibleNames = s.visiblePlansByCarrier?.[carrier] || plans.map((p) => p.name); return <div key={carrier}><b>{carrier}</b><label className="new-join-visible"><input type="checkbox" checked={s.saleVisibleByCarrier?.[carrier] !== false} onChange={(e) => setSaleVisible(i, carrier, e.target.checked)}/> 이 통신사 판매</label><input type="number" value={s.supportByCarrier?.[carrier] ?? ''} onChange={(e) => setCarrierMoney(i, 'supportByCarrier', carrier, e.target.value === '' ? null : Number(e.target.value))} placeholder="공통지원금"/><label className="new-join-visible"><input type="checkbox" checked={s.newJoinVisibleByCarrier?.[carrier] === true} onChange={(e) => setNewJoinVisible(i, carrier, e.target.checked)}/> 신규가입 고객노출</label><div className="plan-admin-list">{plans.map((plan) => { const checked = visibleNames.includes(plan.name); return <div className="plan-admin-row" key={plan.name}><label className="plan-visible"><input type="checkbox" checked={checked} onChange={(e) => setPlanVisible(i, carrier, plan.name, e.target.checked)}/><span>{plan.name}</span><em>{money(plan.fee)}</em></label><input className="plan-support-input" type="number" value={s.planSupportByCarrier?.[carrier]?.[plan.name] ?? ''} onChange={(e) => setPlanSupport(i, carrier, plan.name, e.target.value === '' ? null : Number(e.target.value))} placeholder="요금제 공통지원금"/><div className="join-rebate-fields">{joinTypes.map((type) => <label key={type}>{type}<input type="number" value={s.planRebateByCarrier?.[carrier]?.[plan.name]?.[type] ?? ''} onChange={(e) => setPlanJoinRebate(i, carrier, plan.name, type, e.target.value === '' ? null : Number(e.target.value))} placeholder="요금제 리베이트"/></label>)}</div></div> })}</div><small>선택 요금제는 고객 화면에 표시됩니다.</small></div> })}</div><p className="formula-note">계산식: 출고가 - 공통지원금 - 가입유형별 리베이트 = 고객구매가격(할부원금). 예: SKT 번호이동 기준 {money(samplePrincipal)}</p></div> })}</div>
+  return <div className="option-editor"><div className="option-title storage-title"><b>저장공간 · 통신사별 판매조건</b><div className="storage-presets">{storagePresets.map((label) => { const active = storages.some((storage) => storage.label === label); return <button key={label} type="button" className={active ? 'active' : ''} onClick={() => togglePreset(label)}>{label}</button> })}</div></div><p className="formula-note">이곳에서는 저장공간, 고객 노출, 통신사별 판매 가능 여부, 신규가입 고객노출, 공통지원금만 입력합니다. 요금제별 리베이트는 아래 “통신사 판매 · 리베이트 일괄 입력” 메뉴에서 관리하세요.</p>{storages.map((storage, index) => <div className="storage-edit-card" key={`${storage.label}-${index}`}><div className="storage-edit-row"><input value={storage.label} onChange={(e) => setStorage(index, { label: e.target.value })} placeholder="256G"/><input type="number" value={storage.price ?? ''} onChange={(e) => setStorage(index, { price: e.target.value === '' ? null : Number(e.target.value) })} placeholder="출고가"/><label className="storage-visible"><input type="checkbox" checked={storage.isVisible !== false} onChange={(e) => setStorage(index, { isVisible: e.target.checked })}/> 고객노출</label><button type="button" onClick={() => onChange(storages.filter((_, n) => n !== index))}>삭제</button></div><div className="carrier-support-grid simple-carrier-condition-grid">{carrierKeys.map((carrier) => <div key={carrier}><b>{carrier}</b><label className="new-join-visible"><input type="checkbox" checked={storage.saleVisibleByCarrier?.[carrier] !== false} onChange={(e) => setSaleVisible(index, carrier, e.target.checked)}/> 이 통신사 판매</label><label className="new-join-visible"><input type="checkbox" checked={storage.newJoinVisibleByCarrier?.[carrier] === true} onChange={(e) => setNewJoinVisible(index, carrier, e.target.checked)}/> 신규가입 고객노출</label><input type="number" value={storage.supportByCarrier?.[carrier] ?? ''} onChange={(e) => setCarrierSupport(index, carrier, e.target.value === '' ? null : Number(e.target.value))} placeholder="공통지원금"/></div>)}</div></div>)}</div>
 }
 function AdminInput({ label, value, onChange, required }: { label: string; value: string; onChange: (v: string) => void; required?: boolean }) { return <label>{label}<input value={value} onChange={(e) => onChange(e.target.value)} required={required} /></label> }
 function AdminNumber({ label, value, onChange }: { label: string; value: number | null; onChange: (v: number | null) => void }) { return <label>{label}<input type="number" value={value ?? ''} onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))} /></label> }
