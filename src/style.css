@@ -113,3 +113,6 @@
 /* Keep sticky detail title below the unified header */
 .product-detail-page .detail-left{top:124px!important;padding-top:0!important}.product-detail-page .detail-left .modal-media{min-height:185px!important}.product-detail-page .detail-left .modal-media img,.product-detail-page .detail-page-card.image-compact .modal-media img{width:165px!important;height:165px!important;max-height:165px!important}
 @media(max-width:900px){.product-detail-page .detail-left{top:auto!important;padding-top:28px!important}.product-detail-page .detail-left .modal-media{min-height:260px!important}.product-detail-page .detail-left .modal-media img{width:230px!important;height:230px!important;max-height:230px!important}}
+/* Extra clearance for sticky title under taller header */
+.product-detail-page .detail-left{top:152px!important}.product-detail-page .detail-left .modal-media{min-height:175px!important}.product-detail-page .detail-left .modal-media img,.product-detail-page .detail-page-card.image-compact .modal-media img{width:158px!important;height:158px!important;max-height:158px!important}
+@media(max-width:900px){.product-detail-page .detail-left{top:auto!important}}
