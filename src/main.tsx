@@ -71,6 +71,13 @@ const samsungUltraDetailImages = [
   'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-highlights-refined-design-start.jpg',
   'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-privacy-display-1-start-v2.jpg',
   'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-ap-a-start.jpg',
+  'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-vapor-chamber-a-start-v3.jpg',
+  'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-nightography-start.jpg',
+  'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-space-zoom-start.jpg',
+  'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-photo-assist-start.jpg',
+  'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-now-carousel-now-nudge-start.jpg',
+  'https://images.samsung.com/sec/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-now-carousel-now-brief-a-start.jpg',
+  'https://images.samsung.com/kdp/static/mkt/smartphones/galaxy-s26-ultra/images/galaxy-s26-ultra-features-bixby-start.jpg',
 ]
 const samsungDetailImages = [
   'https://images.samsung.com/sec/smartphones/galaxy-s26/images/galaxy-s26-features-design-intro-start.jpg',
@@ -100,6 +107,9 @@ const samsungS26FeatureImages = [
   'https://images.samsung.com/kdp/cms_task/C20260207010014/57179/545ea53a-d680-4689-82a1-8550a620cd5d.jpg?$FB_TYPE_A_JPG$',
   'https://images.samsung.com/kdp/cms_task/C20260207010015/57180/40de2e7e-af3b-4f37-964c-91e6ab1905e1.jpg?$FB_TYPE_A_JPG$',
   'https://images.samsung.com/kdp/static/pd/smartphone/galaxy-s26/SM-S942N_web_21_left.jpg?$FB_TYPE_B_JPG$',
+]
+const samsungS26PlusFeatureImages = [
+  ...samsungS26FeatureImages,
 ]
 const defaultColors = (image: string): ColorOption[] => [{ name: '블랙', hex: '#1f2329', image }, { name: '화이트', hex: '#f2f2ee', image }, { name: '핑크', hex: '#f6d8dd', image }]
 const storagePresets = ['128G', '256G', '512G', '1TB', '2TB']
@@ -980,13 +990,16 @@ function FaceAuthNotice() { return <section className="face-auth-notice"><div><b
 function ProductOfficialDetails({ phone }: { phone: Phone }) {
   const isSamsung = phone.brand === '삼성'
   const isUltra = /울트라|Ultra/i.test(phone.name)
-  const isS26 = /S26|에스26/i.test(phone.name) && !isUltra
-  const images = isSamsung ? (isS26 ? samsungS26FeatureImages : isUltra ? samsungUltraDetailImages : samsungDetailImages) : (/프로|Pro/i.test(phone.name) ? appleDetailImages : appleBasicDetailImages)
-  const source = isS26 ? 'Samsung 공식 홈페이지 특장점' : isSamsung ? 'Samsung 공식 홈페이지' : 'Apple 공식 홈페이지'
+  const isPlus = /S26\+|S26 플러스|플러스|Plus/i.test(phone.name)
+  const isS26 = /S26|에스26/i.test(phone.name) && !isUltra && !isPlus
+  const images = isSamsung ? (isUltra ? samsungUltraDetailImages : isPlus ? samsungS26PlusFeatureImages : isS26 ? samsungS26FeatureImages : samsungDetailImages) : (/프로|Pro/i.test(phone.name) ? appleDetailImages : appleBasicDetailImages)
+  const source = (isS26 || isPlus || isUltra) ? 'Samsung 공식 홈페이지 특장점' : isSamsung ? 'Samsung 공식 홈페이지' : 'Apple 공식 홈페이지'
   const features = isSamsung ? ['세련된 디자인과 대화면 디스플레이', 'AI 기반 카메라/성능 경험', '일상 사용에 맞춘 배터리와 내구성'] : ['정교한 디자인과 선명한 디스플레이', '강력한 칩셋과 카메라 경험', 'iOS와 Apple Intelligence 기반 기능']
   const [detailExpanded, setDetailExpanded] = useState(false)
-  const visibleImages = isS26 && !detailExpanded ? images.slice(0, 6) : images
-  if (isS26) return <section className={`product-official-detail tdirect-detail ${detailExpanded ? 'expanded' : 'collapsed'}`}><div className="board-title"><div><h3>상품 상세정보</h3></div><strong>{detailExpanded ? `${images.length}장 전체` : '요약보기'}</strong></div><div className="official-detail-long-list">{visibleImages.map((src, index) => <img key={src} src={src} alt={`${phone.name} 삼성전자 특장점 이미지 ${index + 1}`} loading="lazy" />)}{detailExpanded && <img className="s26-spec-full-image" src="/images/samsung-s26-spec-full.png" alt={`${phone.name} 삼성전자 공식 스펙 및 상품 기본정보`} loading="lazy" />}</div><div className="detail-more-box"><button type="button" onClick={() => setDetailExpanded(!detailExpanded)}>{detailExpanded ? '상세정보 접기' : '상세정보 더보기'}</button></div><p className="official-detail-note">상세 이미지는 삼성전자 공식 홈페이지 특장점 기준이며, 색상·용량·구성품은 선택한 모델 및 판매 조건에 따라 달라질 수 있습니다.</p></section>
+  const isLongSamsungDetail = isS26 || isPlus || isUltra
+  const specImage = isUltra ? '/images/samsung-s26-ultra-spec-full.png' : isPlus ? '/images/samsung-s26-plus-spec-full.png' : '/images/samsung-s26-spec-full.png'
+  const visibleImages = isLongSamsungDetail && !detailExpanded ? images.slice(0, 6) : images
+  if (isLongSamsungDetail) return <section className={`product-official-detail tdirect-detail ${detailExpanded ? 'expanded' : 'collapsed'}`}><div className="board-title"><div><h3>상품 상세정보</h3></div><strong>{detailExpanded ? `${images.length}장 전체` : '요약보기'}</strong></div><div className="official-detail-long-list">{visibleImages.map((src, index) => <img key={src} src={src} alt={`${phone.name} 삼성전자 특장점 이미지 ${index + 1}`} loading="lazy" />)}{detailExpanded && <img className="s26-spec-full-image" src={specImage} alt={`${phone.name} 삼성전자 공식 스펙 및 상품 기본정보`} loading="lazy" />}</div><div className="detail-more-box"><button type="button" onClick={() => setDetailExpanded(!detailExpanded)}>{detailExpanded ? '상세정보 접기' : '상세정보 더보기'}</button></div><p className="official-detail-note">상세 이미지는 삼성전자 공식 홈페이지 특장점 기준이며, 색상·용량·구성품은 선택한 모델 및 판매 조건에 따라 달라질 수 있습니다.</p></section>
   return <section className="product-official-detail"><div className="board-title"><div><h3>상품 상세정보</h3><p>{source}의 제품 이미지를 바탕으로 주요 특징을 확인해보세요.</p></div><strong>{phone.brand}</strong></div><div className="official-detail-hero"><img src={images[0]} alt={`${phone.name} 공식 제품 이미지`} loading="lazy" /></div><div className="official-detail-grid">{images.slice(1).map((src, index) => <article key={src}><img src={src} alt={`${phone.name} 상세 이미지 ${index + 1}`} loading="lazy" /><b>{features[index + 1] || features[index]}</b></article>)}</div><ul className="official-detail-points">{features.map((item) => <li key={item}>✓ {item}</li>)}</ul><p className="official-detail-note">상세 이미지와 기능 설명은 제조사 공식 홈페이지 기준이며, 색상·용량·구성품은 선택한 모델 및 제조사 정책에 따라 달라질 수 있습니다.</p></section>
 }
 
