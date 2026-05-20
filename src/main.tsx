@@ -132,6 +132,29 @@ const samsungZFold7FeatureImages = [
   'https://images.samsung.com/sec/smartphones/galaxy-z-fold7/images/galaxy-z-fold7-features-ecosystem.jpg?imbypass=true',
   'https://images.samsung.com/sec/smartphones/galaxy-z-fold7/images/galaxy-z-fold7-features-sustainability.jpg?imbypass=true',
 ]
+
+const samsungZFlip7FeatureImages = [
+  'https://images.samsung.com/kdp/static/pd/smartphone/pd-kv-galaxy-z-flip7-pc-kv-img-v2.jpg',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-highlights-design-start.jpg?imbypass=true',
+  'https://images.samsung.com/kdp/static/mkt/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-highlights-camera.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-highlights-ai-start.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-highlights-battery.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-formfactor-off.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-selfie.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-camera-specs-spec-front.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-camera-specs-spec-rear.png?imbypass=true',
+  'https://images.samsung.com/kdp/static/mkt/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-nightography-start.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-nightography.png?imbypass=true',
+  'https://images.samsung.com/kdp/static/mkt/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-display-viewing.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-storage.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-now-brief-start.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-now-bar-start.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-gemini-live-start.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-one-ui-visual.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-switch-to-galaxy.jpg?imbypass=true',
+  'https://images.samsung.com/kdp/static/mkt/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-ecosystem-a.jpg?imbypass=true',
+  'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-sustainability.jpg?imbypass=true',
+]
 const defaultColors = (image: string): ColorOption[] => [{ name: '블랙', hex: '#1f2329', image }, { name: '화이트', hex: '#f2f2ee', image }, { name: '핑크', hex: '#f6d8dd', image }]
 const storagePresets = ['128G', '256G', '512G', '1TB', '2TB']
 const defaultStorages: StorageOption[] = [{ label: '256G', isVisible: true }]
@@ -1016,12 +1039,13 @@ function ProductOfficialDetails({ phone }: { phone: Phone }) {
   const isPlus = /S26\+|S26 플러스|플러스|Plus/i.test(phone.name)
   const isS26 = /S26|에스26/i.test(phone.name) && !isUltra && !isPlus
   const isFold7 = /Z\s*폴드\s*7|폴드\s*7|Fold\s*7/i.test(phone.name)
-  const images = isSamsung ? (isFold7 ? samsungZFold7FeatureImages : isUltra ? samsungUltraDetailImages : isPlus ? samsungS26PlusFeatureImages : isS26 ? samsungS26FeatureImages : samsungDetailImages) : (/프로|Pro/i.test(phone.name) ? appleDetailImages : appleBasicDetailImages)
-  const source = (isS26 || isPlus || isUltra || isFold7) ? 'Samsung 공식 홈페이지 특장점' : isSamsung ? 'Samsung 공식 홈페이지' : 'Apple 공식 홈페이지'
+  const isFlip7 = /Z\s*플립\s*7|플립\s*7|Flip\s*7/i.test(phone.name)
+  const images = isSamsung ? (isFlip7 ? samsungZFlip7FeatureImages : isFold7 ? samsungZFold7FeatureImages : isUltra ? samsungUltraDetailImages : isPlus ? samsungS26PlusFeatureImages : isS26 ? samsungS26FeatureImages : samsungDetailImages) : (/프로|Pro/i.test(phone.name) ? appleDetailImages : appleBasicDetailImages)
+  const source = (isS26 || isPlus || isUltra || isFold7 || isFlip7) ? 'Samsung 공식 홈페이지 특장점' : isSamsung ? 'Samsung 공식 홈페이지' : 'Apple 공식 홈페이지'
   const features = isSamsung ? ['세련된 디자인과 대화면 디스플레이', 'AI 기반 카메라/성능 경험', '일상 사용에 맞춘 배터리와 내구성'] : ['정교한 디자인과 선명한 디스플레이', '강력한 칩셋과 카메라 경험', 'iOS와 Apple Intelligence 기반 기능']
   const [detailExpanded, setDetailExpanded] = useState(false)
-  const isLongSamsungDetail = isS26 || isPlus || isUltra || isFold7
-  const specImage = isFold7 ? '/images/samsung-z-fold7-spec-full.png' : isUltra ? '/images/samsung-s26-ultra-spec-full.png' : isPlus ? '/images/samsung-s26-plus-spec-full.png' : '/images/samsung-s26-spec-full.png'
+  const isLongSamsungDetail = isS26 || isPlus || isUltra || isFold7 || isFlip7
+  const specImage = isFlip7 ? '/images/samsung-z-flip7-spec-full.png' : isFold7 ? '/images/samsung-z-fold7-spec-full.png' : isUltra ? '/images/samsung-s26-ultra-spec-full.png' : isPlus ? '/images/samsung-s26-plus-spec-full.png' : '/images/samsung-s26-spec-full.png'
   const visibleImages = isLongSamsungDetail && !detailExpanded ? images.slice(0, 6) : images
   if (isLongSamsungDetail) return <section className={`product-official-detail tdirect-detail ${detailExpanded ? 'expanded' : 'collapsed'}`}><div className="board-title"><div><h3>상품 상세정보</h3></div><strong>{detailExpanded ? `${images.length}장 전체` : '요약보기'}</strong></div><div className="official-detail-long-list">{visibleImages.map((src, index) => <img key={src} src={src} alt={`${phone.name} 삼성전자 특장점 이미지 ${index + 1}`} loading="lazy" />)}{detailExpanded && <img className="s26-spec-full-image" src={specImage} alt={`${phone.name} 삼성전자 공식 스펙 및 상품 기본정보`} loading="lazy" />}</div><div className="detail-more-box"><button type="button" onClick={() => setDetailExpanded(!detailExpanded)}>{detailExpanded ? '상세정보 접기' : '상세정보 더보기'}</button></div><p className="official-detail-note">상세 이미지는 삼성전자 공식 홈페이지 특장점 기준이며, 색상·용량·구성품은 선택한 모델 및 판매 조건에 따라 달라질 수 있습니다.</p></section>
   return <section className="product-official-detail"><div className="board-title"><div><h3>상품 상세정보</h3><p>{source}의 제품 이미지를 바탕으로 주요 특징을 확인해보세요.</p></div><strong>{phone.brand}</strong></div><div className="official-detail-hero"><img src={images[0]} alt={`${phone.name} 공식 제품 이미지`} loading="lazy" /></div><div className="official-detail-grid">{images.slice(1).map((src, index) => <article key={src}><img src={src} alt={`${phone.name} 상세 이미지 ${index + 1}`} loading="lazy" /><b>{features[index + 1] || features[index]}</b></article>)}</div><ul className="official-detail-points">{features.map((item) => <li key={item}>✓ {item}</li>)}</ul><p className="official-detail-note">상세 이미지와 기능 설명은 제조사 공식 홈페이지 기준이며, 색상·용량·구성품은 선택한 모델 및 제조사 정책에 따라 달라질 수 있습니다.</p></section>
