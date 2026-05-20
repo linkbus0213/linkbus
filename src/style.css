@@ -116,3 +116,4 @@
 /* Extra clearance for sticky title under taller header */
 .product-detail-page .detail-left{top:152px!important}.product-detail-page .detail-left .modal-media{min-height:175px!important}.product-detail-page .detail-left .modal-media img,.product-detail-page .detail-page-card.image-compact .modal-media img{width:158px!important;height:158px!important;max-height:158px!important}
 @media(max-width:900px){.product-detail-page .detail-left{top:auto!important}}
+.kt-calc-panel dt.subtotal small{display:block;margin-top:2px;color:#7b8495;font-size:10px;font-weight:900;line-height:1.25}
