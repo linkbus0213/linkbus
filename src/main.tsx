@@ -808,7 +808,7 @@ function defaultPlanName(carrier: CarrierKey) { return defaultPlanNames[carrier]
 function carrierValue(values: CarrierMoney | undefined, carrier: CarrierKey, fallback?: number | null) { const value = values?.[carrier]; return value ?? fallback ?? 0 }
 function supportValue(storage: StorageOption | undefined, carrier: CarrierKey, joinType: JoinType, fallback?: number | null, planName?: string) { return (planName ? storage?.planSupportByCarrierJoin?.[carrier]?.[planName]?.[joinType] : undefined) ?? (planName ? storage?.planSupportByCarrier?.[carrier]?.[planName] : undefined) ?? carrierValue(storage?.supportByCarrier, carrier, fallback) }
 function rebateValue(storage: StorageOption | undefined, carrier: CarrierKey, joinType: JoinType, fallback?: number | null, planName?: string) { return (planName ? storage?.planRebateByCarrier?.[carrier]?.[planName]?.[joinType] : undefined) ?? storage?.rebateByCarrierJoin?.[carrier]?.[joinType] ?? storage?.rebateByCarrier?.[carrier] ?? storage?.rebate ?? fallback ?? 0 }
-function saleCarriersForStorage(storage?: StorageOption) { const visibility = storage?.saleVisibleByCarrier; if (!visibility || !Object.keys(visibility).length) return carrierKeys; return carrierKeys.filter((carrier) => visibility[carrier] !== false) }
+function saleCarriersForStorage(storage?: StorageOption) { const visibility = storage?.saleVisibleByCarrier as (CarrierVisibility & Record<string, boolean | undefined>) | undefined; if (!visibility || !Object.keys(visibility).length) return carrierKeys; const visibleValue = (carrier: CarrierKey) => carrier === 'SKT' ? visibility.SKT ?? visibility.SK : carrier === 'LGU+' ? visibility['LGU+'] ?? visibility.LG : visibility.KT; const hasExplicitVisible = carrierKeys.some((carrier) => visibleValue(carrier) === true); const list = hasExplicitVisible ? carrierKeys.filter((carrier) => visibleValue(carrier) === true) : carrierKeys.filter((carrier) => visibleValue(carrier) !== false); return list.length ? list : carrierKeys }
 function visiblePlansForStorage(storage: StorageOption | undefined, carrier: CarrierKey) { const names = storage?.visiblePlansByCarrier?.[carrier]; const plans = carrierPlans.filter((p) => p.carrier === carrier); const isHighPriceModel = (storage?.price ?? 0) > 650000; return isHighPriceModel || !names?.length ? plans : plans.filter((p) => names.includes(p.name)) }
 function customerPrincipal(price?: number | null, support?: number | null, rebate?: number | null) { return Math.max(0, (price ?? 0) - (support ?? 0) - (rebate ?? 0)) }
 function roundToTen(value: number) { return Math.round(value / 10) * 10 }
@@ -901,7 +901,9 @@ function InfoGuide({ title, items }: { title: string; items: string[] }) { retur
 
 function ProductTile({ phone }: { phone: Phone }) {
   const storage = visibleStorages(phone)[0]
-  const carrier = normalizeCarrier(phone.carrier)
+  const saleCarriers = saleCarriersForStorage(storage)
+  const preferredCarrier = normalizeCarrier(phone.carrier)
+  const carrier = saleCarriers.includes(preferredCarrier) ? preferredCarrier : saleCarriers[0]
   const releasePrice = storage?.price ?? phone.price ?? 0
   const support = carrierValue(storage?.supportByCarrier, carrier, storage?.support ?? phone.support)
   const rebate = rebateValue(storage, carrier, phone.joinType, phone.rebate)
