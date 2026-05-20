@@ -851,30 +851,21 @@ function HighlightText({ text }: { text: string }) {
   const pattern = new RegExp(`(${keywords.map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g')
   return <>{text.split(pattern).map((part, index) => keywords.includes(part) ? <mark key={index}>{part}</mark> : <React.Fragment key={index}>{part}</React.Fragment>)}</>
 }
-function CautionText({ text }: { text: string }) {
-  const sectionHeads = new Set(['통신사별/가입유형별 진행 불가인 경우', '위약금 및 잔여할부금 확인 및 가입 불가 요금제', '통신사 이동 :', '신규가입 & 기기변경 :', '부가서비스 및 보험 가입 안내', '유심 안내', '결합 및 복지할인'])
-  const lines = text.split('\n').map((line) => line.trim()).filter(Boolean)
-  const blocks: Array<{ type: 'title' | 'lead' | 'section' | 'subhead' | 'card'; lines: string[] }> = []
-  let current: { type: 'card'; lines: string[] } | null = null
-  const flush = () => { if (current) { blocks.push(current); current = null } }
-  lines.forEach((line, index) => {
-    if (index === 0) { flush(); blocks.push({ type: 'title', lines: [line] }); return }
-    if (line === '휴대폰 구매 시 주의사항 및 필독사항') { flush(); blocks.push({ type: 'lead', lines: [line] }); return }
-    if (/^\[.+\]$/.test(line)) { flush(); blocks.push({ type: 'section', lines: [line.replace(/^\[|\]$/g, '')] }); return }
-    if (sectionHeads.has(line)) { flush(); blocks.push({ type: 'subhead', lines: [line] }); return }
-    if (/^\d+\./.test(line)) { flush(); current = { type: 'card', lines: [line] }; return }
-    if (!current) current = { type: 'card', lines: [] }
-    current.lines.push(line)
-  })
-  flush()
-  return <div className="caution-text">{blocks.map((block, index) => {
-    if (block.type === 'title') return <h3 key={index}><HighlightText text={block.lines[0]} /></h3>
-    if (block.type === 'lead') return <p className="caution-lead" key={index}><HighlightText text={block.lines[0]} /></p>
-    if (block.type === 'section') return <h4 key={index}><HighlightText text={block.lines[0]} /></h4>
-    if (block.type === 'subhead') return <h5 key={index}><HighlightText text={block.lines[0]} /></h5>
-    return <div className="caution-number" key={index}>{block.lines.map((line, lineIndex) => <p className={line.startsWith('-') || line.startsWith('(') ? 'caution-sub' : ''} key={lineIndex}><HighlightText text={line} /></p>)}</div>
-  })}</div>
+const cautionSections = [
+  { title: '공통 안내', items: ['휴대폰 구매 조건은 통신사 정책, 재고, 가입유형, 요금제에 따라 개통 전까지 변경될 수 있습니다.', '개통 후 고객 단순변심으로 인한 반품은 불가합니다. 교환/환불 기준은 교환·반품·환불 안내를 따릅니다.', '명의도용, 허위 신청, 부정 개통, 실사용 목적이 아닌 개통은 진행 불가하며 확인 시 취소됩니다.', '번호이동 전 통신사의 당월 사용요금, 위약금, 잔여할부금은 기존 통신사에서 청구됩니다. 고객센터 114에서 직접 확인해야 합니다.'] },
+  { title: '지원금 안내', items: ['약정기간은 기본 24개월입니다. 약정기간 내 해지, 정지, 명의변경, 유심기변, 타사 이동, 실사용 조건 미충족 시 할인반환금이 청구됩니다.', '링크버스 추가지원금은 개통 후 186일 이내(SK 일부 기준은 285일 이내) 약정 위반 사유 발생 시 전액 반환 대상입니다.', '공통지원금과 추가지원금은 통신사 및 판매 정책에 따라 변경됩니다. 변경 시 개통 전 최종 조건을 다시 안내합니다.', '일부 요금제는 가입 가능하더라도 지원금 또는 추가지원금 적용 대상에서 제외됩니다.'] },
+  { title: '선택약정 요금할인 안내', items: ['선택약정은 요금제 기본료의 25%를 할인받는 방식이며, 공통지원금 할인과 중복 적용되지 않습니다.', '선택약정 할인 금액은 사용 요금제, 약정기간, 통신사 정책에 따라 달라집니다.', '약정기간 중 해지, 번호이동, 요금제 변경 등 통신사 기준에 해당하면 할인반환금이 발생합니다.'] },
+  { title: '요금제/개통 안내', items: ['개통 당시 선택한 요금제 유지기간은 186일입니다. 유지기간 전 요금제 하향 또는 5G/LTE 간 변경은 불가합니다.', '유지기간 이후에도 통신사별 하향 가능 최저 기본료 기준보다 낮은 요금제로 변경하면 할인반환금이 청구됩니다.', '요금 체납, 미납, 신용한도 부족, 회선 제한, 직전 개통일 제한, 선불폰 이용 등 사유가 있으면 개통이 불가합니다.', '번호이동은 기존 통신사가 끊긴 뒤 새 통신사로 개통됩니다. 신규가입과 기기변경은 공식 신청서 및 해피콜 확인 후 진행됩니다.'] },
+  { title: '배송/수령 안내', items: ['배송은 로젠택배 기준으로 진행되며, 오후 6시 이전 신청 건은 당일 발송을 원칙으로 합니다.', '택배사 사정, 지역 지점 상황, 통신사 심사 지연, 재고 이동에 따라 배송이 지연될 수 있습니다.', '번호이동 선발송 건은 개통 전 단말기 박스 미개봉 상태를 유지해야 합니다.', '수령 후 외부 박스 파손이 확인되면 즉시 사진을 남기고 당일 고객센터로 접수해야 합니다.'] },
+  { title: '유심/부가서비스 안내', items: ['기기변경은 기존 유심 재사용을 원칙으로 합니다.', '신규가입 및 번호이동은 USIM 구매 또는 eSIM 다운로드 비용이 발생합니다.', '부가서비스와 휴대폰 보험은 개통 후 고객센터 114 또는 통신사 직영점에서 직접 가입해야 합니다.', '결합할인, 복지할인, 가족결합은 개통 후 고객센터 114 또는 통신사 직영점에서 직접 확인 및 신청해야 합니다.'] },
+  { title: '교환/환불 안내', items: ['단말기 박스 개봉 시 개통 전이라도 교환·반품·환불은 불가합니다.', '개통 완료 후 고객 변심에 의한 개통 취소는 불가합니다.', '미개봉·미개통 상태에서만 단순 변심 반품 접수가 가능하며, 왕복 배송비는 고객 부담입니다.', '단말기 불량은 제조사 서비스센터의 불량 확인서 또는 교품증이 있어야만 교환/환불 접수가 가능합니다.', '통화품질 사유 취소는 통신사 품질 점검 결과 취소 대상이라고 판정된 경우에만 처리됩니다.'] },
+]
+function CautionText({ text: _text }: { text: string }) {
+  const [active, setActive] = useState(0)
+  const section = cautionSections[active]
+  return <div className="notice-clean"><div className="notice-clean-head"><div><h3>유의사항</h3><p>구매 전 꼭 확인해야 하는 내용을 항목별로 정리했습니다.</p></div><span>LINKBUS 안내</span></div><div className="notice-clean-tabs">{cautionSections.map((item, index) => <button type="button" key={item.title} className={active === index ? 'active' : ''} onClick={() => setActive(index)}>{item.title}</button>)}</div><article className="notice-clean-panel"><h4>{section.title}</h4><ul>{section.items.map((item) => <li key={item}><HighlightText text={item} /></li>)}</ul></article></div>
 }
+
 function ProductDetail({ phone }: { phone: Phone }) {
   const defaultCarrier = normalizeCarrier(phone.carrier)
   const [colorIndex, setColorIndex] = useState(0), [storageIndex, setStorageIndex] = useState(0), [targetCarrier, setTargetCarrier] = useState<CarrierKey>(defaultCarrier), [currentCarrier, setCurrentCarrier] = useState<CarrierKey | '알뜰폰' | '신규가입'>('KT')
