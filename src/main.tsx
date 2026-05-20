@@ -77,6 +77,11 @@ const samsungDetailImages = [
   'https://images.samsung.com/sec/smartphones/galaxy-s26/images/galaxy-s26-features-ap-a-start.jpg',
   'https://images.samsung.com/sec/smartphones/galaxy-s26/images/galaxy-s26-features-vapor-chamber-start.jpg',
 ]
+const tDirectS26DetailImages = [
+  'https://cdn.011st.com/11dims/resize/700/11src/cat/26/6/7/8/4/4/1/OlWBp/506678441_dtl_1.jpg',
+  'https://cdn.011st.com/11dims/resize/700/11src/cat/26/6/7/8/4/4/1/STHUU/506678441_dtl_2.jpg',
+  'https://cdn.011st.com/11dims/resize/700/11src/cat/26/6/7/8/4/4/1/LYZQw/506678441_dtl_3.jpg',
+]
 const defaultColors = (image: string): ColorOption[] => [{ name: '블랙', hex: '#1f2329', image }, { name: '화이트', hex: '#f2f2ee', image }, { name: '핑크', hex: '#f6d8dd', image }]
 const storagePresets = ['128G', '256G', '512G', '1TB', '2TB']
 const defaultStorages: StorageOption[] = [{ label: '256G', isVisible: true }]
@@ -956,9 +961,11 @@ function FaceAuthNotice() { return <section className="face-auth-notice"><div><b
 function ProductOfficialDetails({ phone }: { phone: Phone }) {
   const isSamsung = phone.brand === '삼성'
   const isUltra = /울트라|Ultra/i.test(phone.name)
-  const images = isSamsung ? (isUltra ? samsungUltraDetailImages : samsungDetailImages) : (/프로|Pro/i.test(phone.name) ? appleDetailImages : appleBasicDetailImages)
-  const source = isSamsung ? 'Samsung 공식 홈페이지' : 'Apple 공식 홈페이지'
+  const isS26 = /S26|에스26/i.test(phone.name) && !isUltra
+  const images = isSamsung ? (isS26 ? tDirectS26DetailImages : isUltra ? samsungUltraDetailImages : samsungDetailImages) : (/프로|Pro/i.test(phone.name) ? appleDetailImages : appleBasicDetailImages)
+  const source = isS26 ? '11번가 T다이렉트샵 제품 상세페이지' : isSamsung ? 'Samsung 공식 홈페이지' : 'Apple 공식 홈페이지'
   const features = isSamsung ? ['세련된 디자인과 대화면 디스플레이', 'AI 기반 카메라/성능 경험', '일상 사용에 맞춘 배터리와 내구성'] : ['정교한 디자인과 선명한 디스플레이', '강력한 칩셋과 카메라 경험', 'iOS와 Apple Intelligence 기반 기능']
+  if (isS26) return <section className="product-official-detail tdirect-detail"><div className="board-title"><div><h3>상품 상세정보</h3><p>{source}에서 확인한 S26 상세 이미지를 순서대로 적용했습니다.</p></div><strong>S26</strong></div><div className="official-detail-long-list">{images.map((src, index) => <img key={src} src={src} alt={`${phone.name} T다이렉트샵 상세 이미지 ${index + 1}`} loading="lazy" />)}</div><p className="official-detail-note">상세 이미지는 T다이렉트샵 제품 상세페이지 기준이며, 색상·용량·구성품은 선택한 모델 및 판매 조건에 따라 달라질 수 있습니다.</p></section>
   return <section className="product-official-detail"><div className="board-title"><div><h3>상품 상세정보</h3><p>{source}의 제품 이미지를 바탕으로 주요 특징을 확인해보세요.</p></div><strong>{phone.brand}</strong></div><div className="official-detail-hero"><img src={images[0]} alt={`${phone.name} 공식 제품 이미지`} loading="lazy" /></div><div className="official-detail-grid">{images.slice(1).map((src, index) => <article key={src}><img src={src} alt={`${phone.name} 상세 이미지 ${index + 1}`} loading="lazy" /><b>{features[index + 1] || features[index]}</b></article>)}</div><ul className="official-detail-points">{features.map((item) => <li key={item}>✓ {item}</li>)}</ul><p className="official-detail-note">상세 이미지와 기능 설명은 제조사 공식 홈페이지 기준이며, 색상·용량·구성품은 선택한 모델 및 제조사 정책에 따라 달라질 수 있습니다.</p></section>
 }
 
