@@ -77,6 +77,12 @@ const samsungDetailImages = [
   'https://images.samsung.com/sec/smartphones/galaxy-s26/images/galaxy-s26-features-ap-a-start.jpg',
   'https://images.samsung.com/sec/smartphones/galaxy-s26/images/galaxy-s26-features-vapor-chamber-start.jpg',
 ]
+const samsungS26SpecImage = 'https://images.samsung.com/sec/smartphones/galaxy-s26/compare/images/product-img/galaxy-s26-compare-cobalt-violet.png'
+const samsungS26SpecItems = [
+  { title: '프로세서', desc: '갤럭시용 엑시노스 2600', sub: 'Deca-Core' },
+  { title: '디스플레이', desc: '159.3mm FHD+ Dynamic AMOLED 2X', sub: '2,340 × 1,080 / 최대 2,600nits / 1~120Hz' },
+  { title: '카메라', desc: '50MP 광각 · 12MP 초광각 · 10MP 망원', sub: '전면 12MP / 3배 광학 줌 / 최대 30배 디지털 줌' },
+]
 const samsungS26FeatureImages = [
   'https://images.samsung.com/kdp/static/pd/smartphone/galaxy-s26/SM-S942N_web_00_KV_no-cta.jpg',
   'https://images.samsung.com/kdp/cms_task/C20260207010001/57166/9e7e8275-5655-4efe-a8bc-a95ef41f5555.jpg?$ORIGIN_JPG$',
@@ -986,7 +992,7 @@ function ProductOfficialDetails({ phone }: { phone: Phone }) {
   const features = isSamsung ? ['세련된 디자인과 대화면 디스플레이', 'AI 기반 카메라/성능 경험', '일상 사용에 맞춘 배터리와 내구성'] : ['정교한 디자인과 선명한 디스플레이', '강력한 칩셋과 카메라 경험', 'iOS와 Apple Intelligence 기반 기능']
   const [detailExpanded, setDetailExpanded] = useState(false)
   const visibleImages = isS26 && !detailExpanded ? images.slice(0, 6) : images
-  if (isS26) return <section className={`product-official-detail tdirect-detail ${detailExpanded ? 'expanded' : 'collapsed'}`}><div className="board-title"><div><h3>상품 상세정보</h3><p>{source}의 특장점 이미지를 처음부터 끝까지 반영했습니다.</p></div><strong>{detailExpanded ? `${images.length}장 전체` : '요약보기'}</strong></div><div className="official-detail-long-list">{visibleImages.map((src, index) => <img key={src} src={src} alt={`${phone.name} 삼성전자 특장점 이미지 ${index + 1}`} loading="lazy" />)}</div><div className="detail-more-box"><button type="button" onClick={() => setDetailExpanded(!detailExpanded)}>{detailExpanded ? '상세정보 접기' : `상세정보 더보기 (${images.length - visibleImages.length}장 더 보기)`}</button></div><p className="official-detail-note">상세 이미지는 삼성전자 공식 홈페이지 특장점 기준이며, 색상·용량·구성품은 선택한 모델 및 판매 조건에 따라 달라질 수 있습니다.</p></section>
+  if (isS26) return <section className={`product-official-detail tdirect-detail ${detailExpanded ? 'expanded' : 'collapsed'}`}><div className="board-title"><div><h3>상품 상세정보</h3></div><strong>{detailExpanded ? `${images.length}장 전체` : '요약보기'}</strong></div><div className="official-detail-long-list">{visibleImages.map((src, index) => <img key={src} src={src} alt={`${phone.name} 삼성전자 특장점 이미지 ${index + 1}`} loading="lazy" />)}</div><div className="detail-more-box"><button type="button" onClick={() => setDetailExpanded(!detailExpanded)}>{detailExpanded ? '상세정보 접기' : '상세정보 더보기'}</button></div><div className="s26-spec-panel"><div className="s26-spec-phone"><img src={samsungS26SpecImage} alt={`${phone.name} 스펙 이미지`} loading="lazy" /><b>Galaxy S26</b><span>삼성전자 홈페이지 스펙 기준</span></div><div className="s26-spec-grid">{samsungS26SpecItems.map((item) => <article key={item.title}><em>{item.title}</em><strong>{item.desc}</strong><small>{item.sub}</small></article>)}</div></div><p className="official-detail-note">상세 이미지는 삼성전자 공식 홈페이지 특장점 기준이며, 색상·용량·구성품은 선택한 모델 및 판매 조건에 따라 달라질 수 있습니다.</p></section>
   return <section className="product-official-detail"><div className="board-title"><div><h3>상품 상세정보</h3><p>{source}의 제품 이미지를 바탕으로 주요 특징을 확인해보세요.</p></div><strong>{phone.brand}</strong></div><div className="official-detail-hero"><img src={images[0]} alt={`${phone.name} 공식 제품 이미지`} loading="lazy" /></div><div className="official-detail-grid">{images.slice(1).map((src, index) => <article key={src}><img src={src} alt={`${phone.name} 상세 이미지 ${index + 1}`} loading="lazy" /><b>{features[index + 1] || features[index]}</b></article>)}</div><ul className="official-detail-points">{features.map((item) => <li key={item}>✓ {item}</li>)}</ul><p className="official-detail-note">상세 이미지와 기능 설명은 제조사 공식 홈페이지 기준이며, 색상·용량·구성품은 선택한 모델 및 제조사 정책에 따라 달라질 수 있습니다.</p></section>
 }
 
