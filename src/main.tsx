@@ -117,7 +117,7 @@ const samsungS26PlusFeatureImages = [
   ...samsungS26FeatureImages,
 ]
 const samsungZFold7FeatureImages = [
-  'https://images.samsung.com/sec/smartphones/galaxy-z-fold7/images/galaxy-z-fold7-features-kv.jpg?imbypass=true',
+  'https://images.samsung.com/kdp/static/pd/smartphone/pd-kv-galaxy-z-fold7-pc-kv-img.jpg',
   'https://images.samsung.com/sec/smartphones/galaxy-z-fold7/images/galaxy-z-fold7-features-highlights-design-start.jpg?imbypass=true',
   'https://images.samsung.com/kdp/static/mkt/smartphones/galaxy-z-fold7/images/galaxy-z-fold7-features-highlights-camera.jpg?imbypass=true',
   'https://images.samsung.com/kdp/static/mkt/smartphones/galaxy-z-fold7/images/galaxy-z-fold7-features-highlights-ap-start.jpg?imbypass=true',
