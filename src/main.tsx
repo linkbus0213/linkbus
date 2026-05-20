@@ -155,6 +155,21 @@ const samsungZFlip7FeatureImages = [
   'https://images.samsung.com/kdp/static/mkt/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-ecosystem-a.jpg?imbypass=true',
   'https://images.samsung.com/sec/smartphones/galaxy-z-flip7/images/galaxy-z-flip7-features-sustainability.jpg?imbypass=true',
 ]
+const samsungA17FeatureImages = [
+  'https://images.samsung.com/kdp/cms_task/C20251029000031/37133/4fe030d7-70db-489d-92fd-6c7c45c02176.jpg?$ORIGIN_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20251029000032/37134/b95f9948-cb3a-4258-a949-4eb4cb489a04.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20251029000034/37136/4a7dd437-5e44-4313-9ea1-44ad484d794a.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20251029000035/37137/c6bf0d13-c1de-405b-abfa-f2236e928dc3.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20251029000036/37138/fbfa2a63-7948-4e20-bd81-47cbaaecad77.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20251029000037/37139/94c1997c-7a2f-427f-83f7-b458bf10f05f.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20251029000038/37140/18eac863-5cc1-4487-8149-dab4b23cf6ab.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20251029000039/37141/7a304442-4144-46d4-853c-00f755cdfb14.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20251029000040/37142/e15ebc39-29ef-4b42-a5f4-64e8bf2e44c8.jpg?$FB_TYPE_A_JPG$',
+  'https://images.samsung.com/kdp/cms_task/C20251029000041/37143/97c43345-db06-4f57-bae2-1488be7530df.jpg?$FB_TYPE_B_JPG$',
+  'https://images.samsung.com/kdp/static/pd/smartphone/SM-A175N_web_10_1_column.jpg?$FB_TYPE_L_MO_JPG$',
+  'https://images.samsung.com/kdp/static/pd/smartphone/SM-A175N_web_10_2_column.jpg?$FB_TYPE_L_MO_JPG$',
+  'https://images.samsung.com/kdp/static/pd/smartphone/SM-A175N_web_10_3_column.jpg?$FB_TYPE_L_MO_JPG$',
+]
 const defaultColors = (image: string): ColorOption[] => [{ name: '블랙', hex: '#1f2329', image }, { name: '화이트', hex: '#f2f2ee', image }, { name: '핑크', hex: '#f6d8dd', image }]
 const storagePresets = ['128G', '256G', '512G', '1TB', '2TB']
 const defaultStorages: StorageOption[] = [{ label: '256G', isVisible: true }]
@@ -1043,12 +1058,13 @@ function ProductOfficialDetails({ phone }: { phone: Phone }) {
   const isS26 = /S26|에스26/i.test(phone.name) && !isUltra && !isPlus
   const isFold7 = /Z\s*폴드\s*7|폴드\s*7|Fold\s*7/i.test(phone.name)
   const isFlip7 = /Z\s*플립\s*7|플립\s*7|Flip\s*7/i.test(phone.name)
-  const images = isSamsung ? (isFlip7 ? samsungZFlip7FeatureImages : isFold7 ? samsungZFold7FeatureImages : isUltra ? samsungUltraDetailImages : isPlus ? samsungS26PlusFeatureImages : isS26 ? samsungS26FeatureImages : samsungDetailImages) : (/프로|Pro/i.test(phone.name) ? appleDetailImages : appleBasicDetailImages)
-  const source = (isS26 || isPlus || isUltra || isFold7 || isFlip7) ? 'Samsung 공식 홈페이지 특장점' : isSamsung ? 'Samsung 공식 홈페이지' : 'Apple 공식 홈페이지'
+  const isA17 = /A17|에이17/i.test(phone.name)
+  const images = isSamsung ? (isA17 ? samsungA17FeatureImages : isFlip7 ? samsungZFlip7FeatureImages : isFold7 ? samsungZFold7FeatureImages : isUltra ? samsungUltraDetailImages : isPlus ? samsungS26PlusFeatureImages : isS26 ? samsungS26FeatureImages : samsungDetailImages) : (/프로|Pro/i.test(phone.name) ? appleDetailImages : appleBasicDetailImages)
+  const source = (isS26 || isPlus || isUltra || isFold7 || isFlip7 || isA17) ? 'Samsung 공식 홈페이지 특장점' : isSamsung ? 'Samsung 공식 홈페이지' : 'Apple 공식 홈페이지'
   const features = isSamsung ? ['세련된 디자인과 대화면 디스플레이', 'AI 기반 카메라/성능 경험', '일상 사용에 맞춘 배터리와 내구성'] : ['정교한 디자인과 선명한 디스플레이', '강력한 칩셋과 카메라 경험', 'iOS와 Apple Intelligence 기반 기능']
   const [detailExpanded, setDetailExpanded] = useState(false)
-  const isLongSamsungDetail = isS26 || isPlus || isUltra || isFold7 || isFlip7
-  const specImage = isFlip7 ? '/images/samsung-z-flip7-spec-full.png' : isFold7 ? '/images/samsung-z-fold7-spec-full.png' : isUltra ? '/images/samsung-s26-ultra-spec-full.png' : isPlus ? '/images/samsung-s26-plus-spec-full.png' : '/images/samsung-s26-spec-full.png'
+  const isLongSamsungDetail = isS26 || isPlus || isUltra || isFold7 || isFlip7 || isA17
+  const specImage = isA17 ? '/images/samsung-a17-spec-full.png' : isFlip7 ? '/images/samsung-z-flip7-spec-full.png' : isFold7 ? '/images/samsung-z-fold7-spec-full.png' : isUltra ? '/images/samsung-s26-ultra-spec-full.png' : isPlus ? '/images/samsung-s26-plus-spec-full.png' : '/images/samsung-s26-spec-full.png'
   const visibleImages = isLongSamsungDetail && !detailExpanded ? images.slice(0, 6) : images
   if (isLongSamsungDetail) return <section className={`product-official-detail tdirect-detail ${detailExpanded ? 'expanded' : 'collapsed'}`}><div className="board-title"><div><h3>상품 상세정보</h3></div><strong>{detailExpanded ? `${images.length}장 전체` : '요약보기'}</strong></div><div className="official-detail-long-list">{visibleImages.map((src, index) => <img key={src} src={src} alt={`${phone.name} 삼성전자 특장점 이미지 ${index + 1}`} loading="lazy" />)}{detailExpanded && <img className="s26-spec-full-image" src={specImage} alt={`${phone.name} 삼성전자 공식 스펙 및 상품 기본정보`} loading="lazy" />}</div><div className="detail-more-box"><button type="button" onClick={() => setDetailExpanded(!detailExpanded)}>{detailExpanded ? '상세정보 접기' : '상세정보 더보기'}</button></div><p className="official-detail-note">상세 이미지는 삼성전자 공식 홈페이지 특장점 기준이며, 색상·용량·구성품은 선택한 모델 및 판매 조건에 따라 달라질 수 있습니다.</p></section>
   return <section className="product-official-detail"><div className="board-title"><div><h3>상품 상세정보</h3><p>{source}의 제품 이미지를 바탕으로 주요 특징을 확인해보세요.</p></div><strong>{phone.brand}</strong></div><div className="official-detail-hero"><img src={images[0]} alt={`${phone.name} 공식 제품 이미지`} loading="lazy" /></div><div className="official-detail-grid">{images.slice(1).map((src, index) => <article key={src}><img src={src} alt={`${phone.name} 상세 이미지 ${index + 1}`} loading="lazy" /><b>{features[index + 1] || features[index]}</b></article>)}</div><ul className="official-detail-points">{features.map((item) => <li key={item}>✓ {item}</li>)}</ul><p className="official-detail-note">상세 이미지와 기능 설명은 제조사 공식 홈페이지 기준이며, 색상·용량·구성품은 선택한 모델 및 제조사 정책에 따라 달라질 수 있습니다.</p></section>
